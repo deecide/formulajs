@@ -3468,6 +3468,8 @@ exports.CONCATENATE = function() {
   return args.join('');
 };
 
+exports.CONCAT = exports.CONCATENATE;
+
 //TODO
 exports.DBCS = function() {
   throw new Error('DBCS is not implemented');
@@ -5540,21 +5542,35 @@ jStat.diff = function diff(arr) {
 
 // ranks of an array
 jStat.rank = function (arr) {
-  var arrlen = arr.length;
-  var sorted = arr.slice().sort(ascNum);
-  var ranks = new Array(arrlen);
-  var val;
-  for (var i = 0; i < arrlen; i++) {
-    var first = sorted.indexOf(arr[i]);
-    var last = sorted.lastIndexOf(arr[i]);
-    if (first === last) {
-      val = first;
+  var i;
+  var distinctNumbers = [];
+  var numberCounts = {};
+  for (i = 0; i < arr.length; i++) {
+    var number = arr[i];
+    if (numberCounts[number]) {
+      numberCounts[number]++;
     } else {
-      val = (first + last) / 2;
+      numberCounts[number] = 1;
+      distinctNumbers.push(number);
     }
-    ranks[i] = val + 1;
   }
-  return ranks;
+
+  var sortedDistinctNumbers = distinctNumbers.sort(ascNum);
+  var numberRanks = {};
+  var currentRank = 1;
+  for (i = 0; i < sortedDistinctNumbers.length; i++) {
+    var number = sortedDistinctNumbers[i];
+    var count = numberCounts[number];
+    var first = currentRank;
+    var last = currentRank + count - 1;
+    var rank = (first + last) / 2;
+    numberRanks[number] = rank;
+    currentRank += count;
+  }
+
+  return arr.map(function (number) {
+    return numberRanks[number];
+  });
 };
 
 
@@ -6011,6 +6027,9 @@ jStat.gammafn = function gammafn(x) {
   var xnum = 0;
   var y = x;
   var i, z, yi, res;
+  if (x > 171.6243769536076) {
+    return Infinity;
+  }
   if (y <= 0) {
     res = y % 1 + 3.6e-16;
     if (res) {
@@ -6450,9 +6469,9 @@ jStat.randg = function randg(shape, n, m) {
 (function(list) {
   for (var i = 0; i < list.length; i++) (function(func) {
     // distribution instance method
-    jStat[func] = function(a, b, c) {
-      if (!(this instanceof arguments.callee))
-        return new arguments.callee(a, b, c);
+    jStat[func] = function f(a, b, c) {
+      if (!(this instanceof f))
+        return new f(a, b, c);
       this._a = a;
       this._b = b;
       this._c = c;
@@ -9747,6 +9766,10 @@ exports.NUMBERS = function () {
   return possibleNumbers.filter(function (el) {
     return typeof el === 'number';
   });
+};
+
+exports.VALUE = function (input) {
+  return parseFloat(typeof input == 'string' ? input.replace(/[^\d,.]/g, '') : input);
 };
 
 
@@ -13318,8 +13341,12 @@ var error = __webpack_require__(0);
 var utils = __webpack_require__(1);
 
 exports.MATCH = function (lookupValue, lookupArray, matchType) {
-  if (!lookupValue && !lookupArray) {
+  if (typeof lookupValue === 'undefined' || lookupValue === null || !lookupArray) {
     return error.na;
+  }
+  
+  if (/^[0-9,.]*$/.test(lookupValue)) {
+    lookupValue = parseFloat(lookupValue);
   }
 
   if (arguments.length === 2) {
@@ -13379,11 +13406,15 @@ exports.MATCH = function (lookupValue, lookupArray, matchType) {
 };
 
 exports.VLOOKUP = function (needle, table, index, rangeLookup) {
-  if (!needle || !table || !index) {
+  if (typeof needle === 'undefined' || needle === null || !table || !index) {
     return error.na;
   }
+  
+  if (typeof needle === 'string' && /^[0-9,.]*$/.test(needle)) {
+    needle = parseFloat(needle);
+  }
 
-  rangeLookup = !(rangeLookup === 0 || rangeLookup === false);
+  rangeLookup = !(rangeLookup === 0 || rangeLookup === false || rangeLookup === 'FALSE');
   var result = error.na;
   var isNumberLookup = (typeof needle === "number");
   for (var i = 0; i < table.length; i++) {
@@ -13404,7 +13435,7 @@ exports.VLOOKUP = function (needle, table, index, rangeLookup) {
 };
 
 exports.HLOOKUP = function (needle, table, index, rangeLookup) {
-  if (!needle || !table || !index) {
+  if (typeof needle === 'undefined' || needle === null || !table || !index) {
     return error.na;
   }
 
