@@ -1,3 +1,7 @@
+var packageJson = require('./package.json');
+console.log(packageJson.name + '@' + packageJson.version);
+
+
 var categories = [
   require('./lib/compatibility'),
   require('./lib/database'),

@@ -9781,7 +9781,7 @@ var error = __webpack_require__(0);
 var jStat = __webpack_require__(8);
 var text = __webpack_require__(4);
 var utils = __webpack_require__(1);
-var bessel = __webpack_require__(13);
+var bessel = __webpack_require__(14);
 
 function isValidBinaryNumber(number) {
   return (/^[01]{1,10}$/).test(number);
@@ -11351,17 +11351,21 @@ exports.OCT2HEX = function(number, places) {
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var packageJson = __webpack_require__(12);
+console.log(packageJson.name + '@' + packageJson.version);
+
+
 var categories = [
-  __webpack_require__(12),
-  __webpack_require__(14),
-  __webpack_require__(10),
+  __webpack_require__(13),
   __webpack_require__(15),
+  __webpack_require__(10),
+  __webpack_require__(16),
   __webpack_require__(2),
   __webpack_require__(4),
   __webpack_require__(7),
-  __webpack_require__(16),
-  __webpack_require__(6),
   __webpack_require__(17),
+  __webpack_require__(6),
+  __webpack_require__(18),
   __webpack_require__(3),
   __webpack_require__(9)
 ];
@@ -11376,6 +11380,12 @@ for (var c in categories) {
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports) {
+
+module.exports = {"author":"Formulajs","name":"@deecide/formulajs","description":"JavaScript implementation of most Microsoft Excel formula functions","version":"2.6.10","repository":{"type":"git","url":"git@github.com:deecide/formulajs.git"},"main":"index.js","bin":{"implementation-stats":"./bin/implementation-stats"},"scripts":{"test":"make test","test-browser":"make test-browser","lint":"make lint","watch":"make watch","build":"make build","coverage":"make coverage"},"dependencies":{"bessel":"^1.0.2","jstat":"^1.9.2"},"devDependencies":{"blanket":"^1.1.6","browserify":"^13.0.1","cli-table":"^0.3.0","http-server":"^0.12.1","jshint":"^2.11.0","mocha":"^7.1.1","should":"^11.1.0","webpack":"^3.5.5"},"config":{"blanket":{"pattern":"lib","data-cover-never":"node_modules"}},"license":"MIT"}
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var mathTrig = __webpack_require__(2);
@@ -11468,7 +11478,7 @@ exports.ZTEST = statistical.Z.TEST;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* bessel.js (C) 2013-present SheetJS -- http://sheetjs.com */
@@ -11720,7 +11730,7 @@ BESSEL.besselk = besselk;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var error = __webpack_require__(0);
@@ -12125,7 +12135,7 @@ exports.DVARP = function(database, field, criteria) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var error = __webpack_require__(0);
@@ -12251,7 +12261,7 @@ exports.SWITCH = function () {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var error = __webpack_require__(0);
@@ -13334,7 +13344,7 @@ exports.YIELDMAT = function() {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var error = __webpack_require__(0);
