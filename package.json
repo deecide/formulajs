@@ -15,7 +15,7 @@
     "test": "make test",
     "test-browser": "make test-browser",
     "lint": "make lint",
-    "watch": "make watch",
+    "watch": "make test-watch",
     "build": "make build",
     "coverage": "make coverage"
   },

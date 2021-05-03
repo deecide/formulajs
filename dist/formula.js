@@ -11382,7 +11382,7 @@ for (var c in categories) {
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Formulajs","name":"@deecide/formulajs","description":"JavaScript implementation of most Microsoft Excel formula functions","version":"2.6.10","repository":{"type":"git","url":"git@github.com:deecide/formulajs.git"},"main":"index.js","bin":{"implementation-stats":"./bin/implementation-stats"},"scripts":{"test":"make test","test-browser":"make test-browser","lint":"make lint","watch":"make watch","build":"make build","coverage":"make coverage"},"dependencies":{"bessel":"^1.0.2","jstat":"^1.9.2"},"devDependencies":{"blanket":"^1.1.6","browserify":"^13.0.1","cli-table":"^0.3.0","http-server":"^0.12.1","jshint":"^2.11.0","mocha":"^7.1.1","should":"^11.1.0","webpack":"^3.5.5"},"config":{"blanket":{"pattern":"lib","data-cover-never":"node_modules"}},"license":"MIT"}
+module.exports = {"author":"Formulajs","name":"@deecide/formulajs","description":"JavaScript implementation of most Microsoft Excel formula functions","version":"2.6.11","repository":{"type":"git","url":"git@github.com:deecide/formulajs.git"},"main":"index.js","bin":{"implementation-stats":"./bin/implementation-stats"},"scripts":{"test":"make test","test-browser":"make test-browser","lint":"make lint","watch":"make watch","build":"make build","coverage":"make coverage"},"dependencies":{"bessel":"^1.0.2","jstat":"^1.9.2"},"devDependencies":{"blanket":"^1.1.6","browserify":"^13.0.1","cli-table":"^0.3.0","http-server":"^0.12.1","jshint":"^2.11.0","mocha":"^7.1.1","should":"^11.1.0","webpack":"^3.5.5"},"config":{"blanket":{"pattern":"lib","data-cover-never":"node_modules"}},"license":"MIT"}
 
 /***/ }),
 /* 13 */
@@ -13354,7 +13354,7 @@ exports.MATCH = function (lookupValue, lookupArray, matchType) {
   if (typeof lookupValue === 'undefined' || lookupValue === null || !lookupArray) {
     return error.na;
   }
-  
+
   if (/^[0-9,.]*$/.test(lookupValue)) {
     lookupValue = parseFloat(lookupValue);
   }
@@ -13389,7 +13389,7 @@ exports.MATCH = function (lookupValue, lookupArray, matchType) {
     } else if (matchType === 0) {
       if (typeof lookupValue === 'string') {
         lookupValue = lookupValue.replace(/\?/g, '.');
-        if (lookupArray[idx].toLowerCase().match(lookupValue.toLowerCase())) {
+        if (String(lookupArray[idx]).toLowerCase().match(lookupValue.toLowerCase())) {
           return idx + 1;
         }
       } else {
@@ -13419,7 +13419,7 @@ exports.VLOOKUP = function (needle, table, index, rangeLookup) {
   if (typeof needle === 'undefined' || needle === null || !table || !index) {
     return error.na;
   }
-  
+
   if (typeof needle === 'string' && /^[0-9,.]*$/.test(needle)) {
     needle = parseFloat(needle);
   }
