@@ -3,6 +3,9 @@
   "name": "@deecide/formulajs",
   "description": "JavaScript implementation of most Microsoft Excel formula functions",
   "version": "2.6.11",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:deecide/formulajs.git"
