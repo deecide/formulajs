@@ -2,7 +2,7 @@
   "author": "Formulajs",
   "name": "@deecide/formulajs",
   "description": "JavaScript implementation of most Microsoft Excel formula functions",
-  "version": "2.6.11",
+  "version": "2.6.12",
   "publishConfig": {
     "access": "restricted"
   },
