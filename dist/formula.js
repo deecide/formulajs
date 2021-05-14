@@ -94,16 +94,16 @@ exports.data = new Error('#GETTING_DATA');
 
 var error = __webpack_require__(0);
 
-exports.flattenShallow = function(array) {
+exports.flattenShallow = function (array) {
   if (!array || !array.reduce) {
     return array;
   }
 
-  return array.reduce(function(a, b) {
+  return array.reduce(function (a, b) {
     var aIsArray = Array.isArray(a);
     var bIsArray = Array.isArray(b);
 
-    if (aIsArray && bIsArray ) {
+    if (aIsArray && bIsArray) {
       return a.concat(b);
     }
     if (aIsArray) {
@@ -119,7 +119,7 @@ exports.flattenShallow = function(array) {
   });
 };
 
-exports.isFlat = function(array) {
+exports.isFlat = function (array) {
   if (!array) {
     return false;
   }
@@ -133,7 +133,7 @@ exports.isFlat = function(array) {
   return true;
 };
 
-exports.flatten = function() {
+exports.flatten = function () {
   var result = exports.argsToArray.apply(null, arguments);
 
   while (!exports.isFlat(result)) {
@@ -143,29 +143,29 @@ exports.flatten = function() {
   return result;
 };
 
-exports.argsToArray = function(args) {
+exports.argsToArray = function (args) {
   var result = [];
 
-  exports.arrayEach(args, function(value) {
+  exports.arrayEach(args, function (value) {
     result.push(value);
   });
 
   return result;
 };
 
-exports.numbers = function() {
+exports.numbers = function () {
   var possibleNumbers = this.flatten.apply(null, arguments);
-  return possibleNumbers.filter(function(el) {
+  return possibleNumbers.filter(function (el) {
     return typeof el === 'number';
   });
 };
 
-exports.cleanFloat = function(number) {
+exports.cleanFloat = function (number) {
   var power = 1e14;
   return Math.round(number * power) / power;
 };
 
-exports.parseBool = function(bool) {
+exports.parseBool = function (bool) {
   if (typeof bool === 'boolean') {
     return bool;
   }
@@ -196,7 +196,7 @@ exports.parseBool = function(bool) {
   return error.value;
 };
 
-exports.parseNumber = function(string) {
+exports.parseNumber = function (string) {
   if (string === undefined || string === '') {
     return error.value;
   }
@@ -207,7 +207,7 @@ exports.parseNumber = function(string) {
   return error.value;
 };
 
-exports.parseNumberArray = function(arr) {
+exports.parseNumberArray = function (arr) {
   var len;
 
   if (!arr || (len = arr.length) === 0) {
@@ -227,7 +227,7 @@ exports.parseNumberArray = function(arr) {
   return arr;
 };
 
-exports.parseMatrix = function(matrix) {
+exports.parseMatrix = function (matrix) {
   var n;
 
   if (!matrix || (n = matrix.length) === 0) {
@@ -248,7 +248,7 @@ exports.parseMatrix = function(matrix) {
 };
 
 var d1900 = new Date(Date.UTC(1900, 0, 1));
-exports.parseDate = function(date) {
+exports.parseDate = function (date) {
   if (!isNaN(date)) {
     if (date instanceof Date) {
       return new Date(date);
@@ -271,7 +271,7 @@ exports.parseDate = function(date) {
   return error.value;
 };
 
-exports.parseDateArray = function(arr) {
+exports.parseDateArray = function (arr) {
   var len = arr.length;
   var parsed;
   while (len--) {
@@ -284,7 +284,7 @@ exports.parseDateArray = function(arr) {
   return arr;
 };
 
-exports.anyIsError = function() {
+exports.anyIsError = function () {
   var n = arguments.length;
   while (n--) {
     if (arguments[n] instanceof Error) {
@@ -294,7 +294,7 @@ exports.anyIsError = function() {
   return false;
 };
 
-exports.arrayValuesToNumbers = function(arr) {
+exports.arrayValuesToNumbers = function (arr) {
   var n = arr.length;
   var el;
   while (n--) {
@@ -322,7 +322,7 @@ exports.arrayValuesToNumbers = function(arr) {
   return arr;
 };
 
-exports.rest = function(array, idx) {
+exports.rest = function (array, idx) {
   idx = idx || 1;
   if (!array || typeof array.slice !== 'function') {
     return array;
@@ -330,7 +330,7 @@ exports.rest = function(array, idx) {
   return array.slice(idx);
 };
 
-exports.initial = function(array, idx) {
+exports.initial = function (array, idx) {
   idx = idx || 1;
   if (!array || typeof array.slice !== 'function') {
     return array;
@@ -338,8 +338,9 @@ exports.initial = function(array, idx) {
   return array.slice(0, array.length - idx);
 };
 
-exports.arrayEach = function(array, iteratee) {
-  var index = -1, length = array.length;
+exports.arrayEach = function (array, iteratee) {
+  var index = -1,
+    length = array.length;
 
   while (++index < length) {
     if (iteratee(array[index], index, array) === false) {
@@ -350,13 +351,13 @@ exports.arrayEach = function(array, iteratee) {
   return array;
 };
 
-exports.transpose = function(matrix) {
-  if(!matrix) {
+exports.transpose = function (matrix) {
+  if (!matrix) {
     return error.value;
   }
 
-  return matrix[0].map(function(col, i) {
-    return matrix.map(function(row) {
+  return matrix[0].map(function (col, i) {
+    return matrix.map(function (row) {
       return row[i];
     });
   });
@@ -4408,12 +4409,12 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
   if (end_date instanceof Error) {
     return end_date;
   }
-
+  
   var isMask = false;
   var maskDays = [];
   var maskIndex = [1, 2, 3, 4, 5, 6, 0]
   var maskRegex = new RegExp('^[0|1]{7}$');
-
+  
   if (weekend === undefined) {
     weekend = WEEKEND_TYPES[1];
   } else if (typeof weekend === 'string' && maskRegex.test(weekend)) {
@@ -11382,7 +11383,7 @@ for (var c in categories) {
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Formulajs","name":"@deecide/formulajs","description":"JavaScript implementation of most Microsoft Excel formula functions","version":"2.6.11","repository":{"type":"git","url":"git@github.com:deecide/formulajs.git"},"main":"index.js","bin":{"implementation-stats":"./bin/implementation-stats"},"scripts":{"test":"make test","test-browser":"make test-browser","lint":"make lint","watch":"make watch","build":"make build","coverage":"make coverage"},"dependencies":{"bessel":"^1.0.2","jstat":"^1.9.2"},"devDependencies":{"blanket":"^1.1.6","browserify":"^13.0.1","cli-table":"^0.3.0","http-server":"^0.12.1","jshint":"^2.11.0","mocha":"^7.1.1","should":"^11.1.0","webpack":"^3.5.5"},"config":{"blanket":{"pattern":"lib","data-cover-never":"node_modules"}},"license":"MIT"}
+module.exports = {"author":"Formulajs","name":"@deecide/formulajs","description":"JavaScript implementation of most Microsoft Excel formula functions","version":"2.6.14","publishConfig":{"access":"restricted"},"repository":{"type":"git","url":"git@github.com:deecide/formulajs.git"},"main":"index.js","bin":{"implementation-stats":"./bin/implementation-stats"},"scripts":{"test":"make test","test-browser":"make test-browser","lint":"make lint","watch":"make test-watch","build":"make build","coverage":"make coverage"},"dependencies":{"bessel":"^1.0.2","jstat":"^1.9.2"},"devDependencies":{"blanket":"^1.1.6","browserify":"^13.0.1","cli-table":"^0.3.0","http-server":"^0.12.1","jshint":"^2.11.0","mocha":"^7.1.1","should":"^11.1.0","webpack":"^3.5.5"},"config":{"blanket":{"pattern":"lib","data-cover-never":"node_modules"}},"license":"MIT","gitHead":"897bf4104289c4c8ddacaf478465d501251a229b"}
 
 /***/ }),
 /* 13 */
@@ -12142,7 +12143,7 @@ var error = __webpack_require__(0);
 var utils = __webpack_require__(1);
 var information = __webpack_require__(6);
 
-exports.AND = function() {
+exports.AND = function () {
   var args = utils.flatten(arguments);
   var result = true;
   for (var i = 0; i < args.length; i++) {
@@ -12153,7 +12154,7 @@ exports.AND = function() {
   return result;
 };
 
-exports.CHOOSE = function() {
+exports.CHOOSE = function () {
   if (arguments.length < 2) {
     return error.na;
   }
@@ -12170,15 +12171,15 @@ exports.CHOOSE = function() {
   return arguments[index];
 };
 
-exports.FALSE = function() {
+exports.FALSE = function () {
   return false;
 };
 
-exports.IF = function(test, then_value, otherwise_value) {
+exports.IF = function (test, then_value, otherwise_value) {
   return test ? then_value : otherwise_value;
 };
 
-exports.IFS = function() {
+exports.IFS = function () {
   for (var i = 0; i < arguments.length / 2; i++) {
     if (arguments[i * 2]) {
       return arguments[i * 2 + 1];
@@ -12187,22 +12188,22 @@ exports.IFS = function() {
   return error.na;
 };
 
-exports.IFERROR = function(value, valueIfError) {
+exports.IFERROR = function (value, valueIfError) {
   if (information.ISERROR(value)) {
     return valueIfError;
   }
   return value;
 };
 
-exports.IFNA = function(value, value_if_na) {
+exports.IFNA = function (value, value_if_na) {
   return value === error.na ? value_if_na : value;
 };
 
-exports.NOT = function(logical) {
+exports.NOT = function (logical) {
   return !logical;
 };
 
-exports.OR = function() {
+exports.OR = function () {
   var args = utils.flatten(arguments);
   var result = false;
   for (var i = 0; i < args.length; i++) {
@@ -12213,11 +12214,11 @@ exports.OR = function() {
   return result;
 };
 
-exports.TRUE = function() {
+exports.TRUE = function () {
   return true;
 };
 
-exports.XOR = function() {
+exports.XOR = function () {
   var args = utils.flatten(arguments);
   var result = 0;
   for (var i = 0; i < args.length; i++) {
@@ -12225,13 +12226,13 @@ exports.XOR = function() {
       result++;
     }
   }
-  return (Math.floor(Math.abs(result)) & 1) ? true : false;
+  return Math.floor(Math.abs(result)) & 1 ? true : false;
 };
 
 exports.SWITCH = function () {
   var result;
 
-  if (arguments.length > 0)  {
+  if (arguments.length > 0) {
     var targetValue = arguments[0];
     var argc = arguments.length - 1;
     var switchCount = Math.floor(argc / 2);
@@ -13351,7 +13352,11 @@ var error = __webpack_require__(0);
 var utils = __webpack_require__(1);
 
 exports.MATCH = function (lookupValue, lookupArray, matchType) {
-  if (typeof lookupValue === 'undefined' || lookupValue === null || !lookupArray) {
+  if (
+    typeof lookupValue === 'undefined' ||
+    lookupValue === null ||
+    !lookupArray
+  ) {
     return error.na;
   }
 
@@ -13365,9 +13370,7 @@ exports.MATCH = function (lookupValue, lookupArray, matchType) {
   if (!(lookupArray instanceof Array)) {
     return error.na;
   }
-
   lookupArray = utils.flatten(lookupArray);
-
   if (matchType !== -1 && matchType !== 0 && matchType !== 1) {
     return error.na;
   }
@@ -13389,7 +13392,9 @@ exports.MATCH = function (lookupValue, lookupArray, matchType) {
     } else if (matchType === 0) {
       if (typeof lookupValue === 'string') {
         lookupValue = lookupValue.replace(/\?/g, '.');
-        if (String(lookupArray[idx]).toLowerCase().match(lookupValue.toLowerCase())) {
+        if (
+          String(lookupArray[idx]).toLowerCase() === lookupValue.toLowerCase()
+        ) {
           return idx + 1;
         }
       } else {
@@ -13411,7 +13416,6 @@ exports.MATCH = function (lookupValue, lookupArray, matchType) {
       }
     }
   }
-
   return index ? index : error.na;
 };
 
@@ -13424,18 +13428,26 @@ exports.VLOOKUP = function (needle, table, index, rangeLookup) {
     needle = parseFloat(needle);
   }
 
-  rangeLookup = !(rangeLookup === 0 || rangeLookup === false || rangeLookup === 'FALSE');
+  rangeLookup = !(
+    rangeLookup === 0 ||
+    rangeLookup === false ||
+    rangeLookup === 'FALSE'
+  );
   var result = error.na;
-  var isNumberLookup = (typeof needle === "number");
+  var isNumberLookup = typeof needle === 'number';
   for (var i = 0; i < table.length; i++) {
     var row = table[i];
 
     if (row[0] === needle) {
-      result = (index < (row.length + 1) ? row[index - 1] : error.ref);
+      result = index < row.length + 1 ? row[index - 1] : error.ref;
       break;
-    } else if ((isNumberLookup && rangeLookup && row[0] <= needle) ||
-      (rangeLookup && typeof row[0] === "string" && row[0].localeCompare(needle) < 0)) {
-      result = (index < (row.length + 1) ? row[index - 1] : error.ref);
+    } else if (
+      (isNumberLookup && rangeLookup && row[0] <= needle) ||
+      (rangeLookup &&
+        typeof row[0] === 'string' &&
+        row[0].localeCompare(needle) < 0)
+    ) {
+      result = index < row.length + 1 ? row[index - 1] : error.ref;
     } else if (isNumberLookup && rangeLookup && row[0] > needle) {
       return result;
     }
@@ -13455,10 +13467,14 @@ exports.HLOOKUP = function (needle, table, index, rangeLookup) {
 
   for (var i = 0; i < transposedTable.length; i++) {
     var row = transposedTable[i];
-    if ((!rangeLookup && row[0] === needle) ||
-      ((row[0] === needle) ||
-        (rangeLookup && typeof row[0] === "string" && row[0].toLowerCase().indexOf(needle.toLowerCase()) !== -1))) {
-      return (index < (row.length + 1) ? row[index - 1] : error.ref);
+    if (
+      (!rangeLookup && row[0] === needle) ||
+      row[0] === needle ||
+      (rangeLookup &&
+        typeof row[0] === 'string' &&
+        row[0].toLowerCase().indexOf(needle.toLowerCase()) !== -1)
+    ) {
+      return index < row.length + 1 ? row[index - 1] : error.ref;
     }
   }
 
@@ -13468,16 +13484,19 @@ exports.HLOOKUP = function (needle, table, index, rangeLookup) {
 exports.LOOKUP = function (searchCriterion, array, resultArray) {
   array = utils.flatten(array);
   resultArray = utils.flatten(resultArray);
-  var isNumberLookup = (typeof searchCriterion === "number");
+  var isNumberLookup = typeof searchCriterion === 'number';
   var result = error.na;
 
   for (var i = 0; i < array.length; i++) {
     if (array[i] === searchCriterion) {
       return resultArray[i];
-    } else if ((isNumberLookup && array[i] <= searchCriterion) ||
-      (typeof array[i] === "string" && array[i].localeCompare(searchCriterion) < 0)) {
+    } else if (
+      (isNumberLookup && array[i] <= searchCriterion) ||
+      (typeof array[i] === 'string' &&
+        array[i].localeCompare(searchCriterion) < 0)
+    ) {
       result = resultArray[i];
-    } else if ((isNumberLookup && array[i] > searchCriterion)) {
+    } else if (isNumberLookup && array[i] > searchCriterion) {
       return result;
     }
   }
