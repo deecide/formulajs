@@ -2,7 +2,7 @@
   "author": "Formulajs",
   "name": "@deecide/formulajs",
   "description": "JavaScript implementation of most Microsoft Excel formula functions",
-  "version": "2.6.14",
+  "version": "2.6.16",
   "publishConfig": {
     "access": "restricted"
   },
@@ -43,5 +43,5 @@
     }
   },
   "license": "MIT",
-  "gitHead": "897bf4104289c4c8ddacaf478465d501251a229b"
+  "gitHead": "ac4da1aa74e5fcb8ceb7bff03c68eee04da369e1"
 }
