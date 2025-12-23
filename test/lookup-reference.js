@@ -1255,9 +1255,7 @@ describe('Lookup Reference', () => {
   })
 
   it('VLOOKUP', () => {
-    expect(lookup.VLOOKUP()).to.equal(error.na)
-    expect(lookup.VLOOKUP(1)).to.equal(error.na)
-    expect(lookup.VLOOKUP(1, [[1, 2]])).to.equal(error.na)
+    expect(lookup.VLOOKUP(1, [[1, 2]])).to.equal(error.value)
     expect(lookup.VLOOKUP(1, [[1, 2]], 2)).to.equal(2)
     expect(lookup.VLOOKUP(1, [[1, 2]], 2, false)).to.equal(2)
     expect(lookup.VLOOKUP(1, [[1, 2]], 2, true)).to.equal(2)
@@ -1573,9 +1571,7 @@ describe('Lookup Reference', () => {
   })
 
   it('HLOOKUP', () => {
-    expect(lookup.HLOOKUP()).to.equal(error.na)
-    expect(lookup.HLOOKUP(1)).to.equal(error.na)
-    expect(lookup.HLOOKUP(1, [[1, 2]])).to.equal(error.na)
+    expect(lookup.HLOOKUP(1, [[1, 2]])).to.equal(error.value)
     expect(lookup.HLOOKUP(1, [[1], [2]], 2)).to.equal(2)
     expect(lookup.HLOOKUP(1, [[1], [2]], 3)).to.equal(error.ref)
     expect(

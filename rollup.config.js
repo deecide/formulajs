@@ -20,8 +20,8 @@ const baseConfig = {
 const nodeConfig = {
   ...baseConfig,
   output: [
-    { format: 'cjs', file: 'lib/cjs/index.cjs' },
-    { format: 'esm', file: 'lib/esm/index.mjs' }
+    { format: 'cjs', file: 'lib/cjs/index.cjs', sourcemap: true },
+    { format: 'esm', file: 'lib/esm/index.mjs', sourcemap: true }
   ]
 }
 

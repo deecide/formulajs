@@ -77,6 +77,22 @@ const WEEKEND_TYPES = [
 export function DATE(year, month, day) {
   let result
 
+  if (year instanceof Error) {
+    return year
+  }
+
+  if (month instanceof Error) {
+    return month
+  }
+
+  if (day instanceof Error) {
+    return day
+  }
+
+  if (typeof year === 'string' || typeof month === 'string' || typeof day === 'string') {
+    return error.value
+  }
+
   year = utils.parseNumber(year)
   month = utils.parseNumber(month)
   day = utils.parseNumber(day)
@@ -84,6 +100,18 @@ export function DATE(year, month, day) {
   if (utils.anyIsError(year, month, day)) {
     result = error.value
   } else {
+    if (year < 0 || year > 9999) {
+      return error.num
+    }
+
+    if (year === 0 && month === 0) {
+      return error.num
+    }
+
+    if (year >= 0 && year <= 1899) {
+      year = year + 1900
+    }
+
     result = new Date(year, month - 1, day)
 
     if (result.getFullYear() < 0) {
@@ -111,9 +139,46 @@ export function DATE(year, month, day) {
  * @returns
  */
 export function DATEDIF(start_date, end_date, unit) {
+  if (start_date instanceof Error) {
+    return start_date
+  }
+
+  if (end_date instanceof Error) {
+    return end_date
+  }
+
+  if (unit instanceof Error) {
+    return unit
+  }
+
+  if (
+    unit === null ||
+    unit === undefined ||
+    typeof unit !== 'string' ||
+    !['Y', 'M', 'D', 'MD', 'YM', 'YD'].includes(unit.toUpperCase())
+  ) {
+    return error.num
+  }
+
+  if ((start_date === null || start_date === undefined) && (end_date === null || end_date === undefined)) {
+    return 0
+  }
+
+  if (start_date === null || start_date === undefined) {
+    start_date = new Date('1900-01-01')
+  }
+
+  if (end_date === null || end_date === undefined) {
+    return error.num
+  }
+
   unit = unit.toUpperCase()
   start_date = utils.parseDate(start_date)
   end_date = utils.parseDate(end_date)
+
+  if (start_date > end_date) {
+    return error.num
+  }
 
   const start_date_year = start_date.getFullYear()
   const start_date_month = start_date.getMonth()
@@ -211,13 +276,25 @@ export function DATEVALUE(date_text) {
  * @returns
  */
 export function DAY(serial_number) {
-  const date = utils.parseDate(serial_number)
+  if (serial_number === null || serial_number === undefined) {
+    return 0
+  } else if (serial_number instanceof Error) {
+    return serial_number
+  } else if (typeof serial_number === 'boolean') {
+    if (serial_number) {
+      return 1
+    } else {
+      return 0
+    }
+  } else {
+    const date = utils.parseDate(serial_number)
 
-  if (date instanceof Error) {
-    return date
+    if (date instanceof Error) {
+      return date
+    }
+
+    return date.getDate()
   }
-
-  return date.getDate()
 }
 
 function startOfDay(date) {
@@ -445,13 +522,21 @@ export function MINUTE(serial_number) {
  * @returns
  */
 export function MONTH(serial_number) {
-  serial_number = utils.parseDate(serial_number)
-
-  if (serial_number instanceof Error) {
+  if (serial_number === null || serial_number === undefined) {
+    return 1
+  } else if (serial_number instanceof Error) {
     return serial_number
-  }
+  } else if (typeof serial_number === 'boolean') {
+    return 1
+  } else {
+    const date = utils.parseDate(serial_number)
 
-  return serial_number.getMonth() + 1
+    if (date instanceof Error) {
+      return date
+    }
+
+    return date.getMonth() + 1
+  }
 }
 
 /**
@@ -815,13 +900,21 @@ WORKDAY.INTL = (start_date, days, weekend, holidays) => {
  * @returns
  */
 export function YEAR(serial_number) {
-  serial_number = utils.parseDate(serial_number)
-
-  if (serial_number instanceof Error) {
+  if (serial_number === null || serial_number === undefined) {
+    return 1900
+  } else if (serial_number instanceof Error) {
     return serial_number
-  }
+  } else if (typeof serial_number === 'boolean') {
+    return 1900
+  } else {
+    const date = utils.parseDate(serial_number)
 
-  return serial_number.getFullYear()
+    if (date instanceof Error) {
+      return date
+    }
+
+    return date.getFullYear()
+  }
 }
 
 function isLeapYear(year) {

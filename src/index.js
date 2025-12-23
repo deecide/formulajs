@@ -1,6 +1,7 @@
 import * as errors from './utils/error.js'
 import * as date from './utils/date.js'
 import * as symbols from './utils/symbol.js'
+import * as common from './utils/common.js'
 
 export * from './compatibility.js'
 export * from './database.js'
@@ -14,4 +15,4 @@ export * from './math-trig.js'
 export * from './statistical.js'
 export * from './text.js'
 
-export const utils = { errors, symbols, date }
+export const utils = { errors, symbols, date, common }

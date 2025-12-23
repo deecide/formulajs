@@ -3,6 +3,7 @@
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": true,
+    "declarationMap": true,
     "outDir": "types",
     "target": "ES6"
   },

@@ -7,7 +7,7 @@ describe('Text', () => {
   it('CHAR', () => {
     expect(text.CHAR(65)).to.equal('A')
     expect(text.CHAR(255)).to.equal('ÿ')
-    expect(text.CHAR(1000)).to.equal('Ϩ')
+    expect(text.CHAR(1000)).to.equal(error.value)
     expect(text.CHAR(undefined)).to.equal(error.value)
     expect(text.CHAR(error.na)).to.equal(error.na)
     expect(text.CHAR('invalid')).to.equal(error.value)
@@ -360,7 +360,7 @@ describe('Text', () => {
     expect(text.UNICHAR(error.na)).to.equal(error.na)
     expect(text.UNICHAR(65)).to.equal('A')
     expect(text.UNICHAR(255)).to.equal('ÿ')
-    expect(text.UNICHAR(1000)).to.equal('Ϩ')
+    expect(text.UNICHAR(1000)).to.equal(error.value)
   })
 
   it('UNICODE', () => {

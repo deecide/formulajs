@@ -124,6 +124,13 @@ export function INDEX(array, row_num, column_num) {
     return error.value
   }
 
+  if (
+    typeof row_num === 'string' ||
+    (column_num !== null && column_num !== undefined && typeof column_num === 'string')
+  ) {
+    return error.value
+  }
+
   const isOneDimensionRange = array.length > 0 && !Array.isArray(array[0])
 
   if (isOneDimensionRange && !column_num) {
@@ -193,7 +200,15 @@ export function LOOKUP(lookup_value, array, result_array) {
  * @returns
  */
 export function MATCH(lookup_value, lookup_array, match_type) {
-  if ((!lookup_value && lookup_value !== 0) || !lookup_array) {
+  if (lookup_value instanceof Error) {
+    return lookup_value
+  }
+
+  if (match_type instanceof Error) {
+    return error.ref
+  }
+
+  if ((typeof lookup_value !== 'boolean' && !lookup_value && lookup_value !== 0) || !lookup_array) {
     return error.na
   }
 
@@ -211,61 +226,83 @@ export function MATCH(lookup_value, lookup_array, match_type) {
     return error.na
   }
 
-  let index
-  let indexValue
+  if (match_type === 1) {
+    let left = 0
+    let right = lookup_array.length - 1
+    let result = -1
 
-  for (let idx = 0; idx < lookup_array.length; idx++) {
-    if (match_type === 1) {
-      if (lookup_array[idx] === lookup_value) {
-        return idx + 1
-      } else if (lookup_array[idx] < lookup_value) {
-        if (!indexValue) {
-          index = idx + 1
-          indexValue = lookup_array[idx]
-        } else if (lookup_array[idx] > indexValue) {
-          index = idx + 1
-          indexValue = lookup_array[idx]
-        }
-      }
-    } else if (match_type === 0) {
-      if (typeof lookup_value === 'string' && typeof lookup_array[idx] === 'string') {
-        const lookupValueStr = lookup_value
-          .toLowerCase()
-          .replace(/\?/g, '.')
-          .replace(/\*/g, '.*')
-          .replace(/~/g, '\\')
-          .replace(/\+/g, '\\+')
-          .replace(/\(/g, '\\(')
-          .replace(/\)/g, '\\)')
-          .replace(/\[/g, '\\[')
-          .replace(/\]/g, '\\]')
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2)
+      const midValue = lookup_array[mid]
 
-        const regex = new RegExp('^' + lookupValueStr + '$')
-
-        if (regex.test(lookup_array[idx].toLowerCase())) {
-          return idx + 1
-        }
+      if (midValue === lookup_value) {
+        return mid + 1
+      } else if (midValue === null || midValue < lookup_value) {
+        result = mid
+        left = mid + 1
       } else {
+        right = mid - 1
+      }
+    }
+
+    return result === -1 ? error.na : result + 1
+  } else {
+    let index
+    let indexValue
+
+    for (let idx = 0; idx < lookup_array.length; idx++) {
+      if (match_type === 1) {
         if (lookup_array[idx] === lookup_value) {
           return idx + 1
+        } else if (lookup_array[idx] < lookup_value) {
+          if (!indexValue) {
+            index = idx + 1
+            indexValue = lookup_array[idx]
+          } else if (lookup_array[idx] > indexValue) {
+            index = idx + 1
+            indexValue = lookup_array[idx]
+          }
         }
-      }
-    } else if (match_type === -1) {
-      if (lookup_array[idx] === lookup_value) {
-        return idx + 1
-      } else if (lookup_array[idx] > lookup_value) {
-        if (!indexValue) {
-          index = idx + 1
-          indexValue = lookup_array[idx]
-        } else if (lookup_array[idx] < indexValue) {
-          index = idx + 1
-          indexValue = lookup_array[idx]
+      } else if (match_type === 0) {
+        if (typeof lookup_value === 'string' && typeof lookup_array[idx] === 'string') {
+          const lookupValueStr = lookup_value
+            .toLowerCase()
+            .replace(/\?/g, '.')
+            .replace(/\*/g, '.*')
+            .replace(/~/g, '\\')
+            .replace(/\+/g, '\\+')
+            .replace(/\(/g, '\\(')
+            .replace(/\)/g, '\\)')
+            .replace(/\[/g, '\\[')
+            .replace(/\]/g, '\\]')
+
+          const regex = new RegExp('^' + lookupValueStr + '$')
+
+          if (regex.test(lookup_array[idx].toLowerCase())) {
+            return idx + 1
+          }
+        } else {
+          if (lookup_array[idx] === lookup_value) {
+            return idx + 1
+          }
+        }
+      } else if (match_type === -1) {
+        if (lookup_array[idx] === lookup_value) {
+          return idx + 1
+        } else if (lookup_array[idx] > lookup_value) {
+          if (!indexValue) {
+            index = idx + 1
+            indexValue = lookup_array[idx]
+          } else if (lookup_array[idx] < indexValue) {
+            index = idx + 1
+            indexValue = lookup_array[idx]
+          }
         }
       }
     }
-  }
 
-  return index || error.na
+    return index || error.na
+  }
 }
 
 /**
@@ -407,8 +444,28 @@ export function UNIQUE() {
  * @returns
  */
 export function VLOOKUP(lookup_value, table_array, col_index_num, range_lookup) {
-  if (!table_array || !col_index_num) {
+  if (!table_array) {
     return error.na
+  }
+
+  if (lookup_value instanceof Error) {
+    return lookup_value
+  }
+
+  if (col_index_num instanceof Error) {
+    return error.ref
+  }
+
+  if (range_lookup instanceof Error) {
+    return range_lookup
+  }
+
+  if (typeof col_index_num !== 'number' || col_index_num <= 0) {
+    return error.value
+  }
+
+  if (typeof range_lookup === 'string') {
+    return error.value
   }
 
   range_lookup = !(range_lookup === 0 || range_lookup === false)

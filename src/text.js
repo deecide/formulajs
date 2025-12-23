@@ -13,7 +13,7 @@ import { ROUND } from './math-trig.js'
 export function CHAR(number) {
   number = utils.parseNumber(number)
 
-  if (number === 0) {
+  if (number < 1 || number > 255) {
     return error.value
   }
 
@@ -168,12 +168,37 @@ export function EXACT(text1, text2) {
  * @returns
  */
 export function FIND(find_text, within_text, start_num) {
+  if (find_text instanceof Error) {
+    return find_text
+  }
+
+  if (within_text instanceof Error) {
+    return within_text
+  }
+
+  if (start_num instanceof Error) {
+    return start_num
+  }
+
+  if (typeof start_num === 'string') {
+    return error.value
+  }
+
+  if (start_num <= 0) {
+    return error.value
+  }
+
+  within_text = utils.parseString(within_text)
+
+  if (!(within_text === '' && start_num === 1) && within_text.length < start_num) {
+    return error.value
+  }
+
   if (arguments.length < 2) {
     return error.na
   }
 
   find_text = utils.parseString(find_text)
-  within_text = utils.parseString(within_text)
   start_num = start_num === undefined ? 0 : start_num
   const found_index = within_text.indexOf(find_text, start_num - 1)
 
@@ -233,6 +258,20 @@ export function FIXED(number, decimals = 2, no_commas = false) {
  * @returns
  */
 export function LEFT(text, num_chars) {
+  if (typeof num_chars === 'string' || typeof num_chars === 'number') {
+    if (typeof num_chars === 'string') {
+      num_chars = parseFloat(num_chars)
+
+      if (isNaN(num_chars)) {
+        return error.value
+      }
+    }
+
+    if (num_chars < 0) {
+      return error.value
+    }
+  }
+
   const someError = utils.anyError(text, num_chars)
 
   if (someError) {
@@ -434,6 +473,20 @@ export function REPT(text, number_times) {
  * @returns
  */
 export function RIGHT(text, num_chars) {
+  if (typeof num_chars === 'string' || typeof num_chars === 'number') {
+    if (typeof num_chars === 'string') {
+      num_chars = parseFloat(num_chars)
+
+      if (isNaN(num_chars)) {
+        return error.value
+      }
+    }
+
+    if (num_chars < 0) {
+      return error.value
+    }
+  }
+
   const someError = utils.anyError(text, num_chars)
 
   if (someError) {

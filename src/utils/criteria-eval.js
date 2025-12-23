@@ -36,6 +36,10 @@ function castValueToCorrectType(value) {
     return value
   }
 
+  if (value === null) {
+    return null
+  }
+
   if (/^\d+(\.\d+)?$/.test(value)) {
     value = value.indexOf('.') === -1 ? parseInt(value, 10) : parseFloat(value)
   }
@@ -144,6 +148,15 @@ function computeExpression(tokens) {
         operator = token.value
         break
       case TOKEN_TYPE_LITERAL:
+        if (token.value === 'true') {
+          token.value = true
+        }
+        if (token.value === 'false') {
+          token.value = false
+        }
+        if (token.value === 'null') {
+          token.value = null
+        }
         values.push(token.value)
         break
     }
@@ -176,7 +189,11 @@ function evaluate(values, operator) {
       result = values[0] <= values[1]
       break
     case '=':
-      result = values[0] == values[1]
+      if (typeof values[0] === 'string' && typeof values[1] === 'string') {
+        result = values[0].toUpperCase() == values[1].toUpperCase()
+      } else {
+        result = values[0] == values[1]
+      }
       break
     case '<>':
       result = values[0] != values[1]

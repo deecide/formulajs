@@ -1072,10 +1072,13 @@ export function MOD(number, divisor) {
     return error.div0
   }
 
-  let modulus = Math.abs(number % divisor)
-  modulus = number < 0 ? divisor - modulus : modulus
+  const result = number % divisor
 
-  return divisor > 0 ? modulus : -modulus
+  if ((result > 0 && divisor < 0) || (result < 0 && divisor > 0)) {
+    return result + divisor
+  }
+
+  return result
 }
 
 /**
@@ -1400,6 +1403,14 @@ export function ROMAN(number) {
  * @returns
  */
 export function ROUND(number, num_digits) {
+  if (number instanceof Error) {
+    return number
+  }
+
+  if (num_digits instanceof Error) {
+    return num_digits
+  }
+
   number = utils.parseNumber(number)
   num_digits = utils.parseNumber(num_digits)
   const anyError = utils.anyError(number, num_digits)
@@ -1429,7 +1440,7 @@ export function ROUNDDOWN(number, num_digits) {
     return anyError
   }
 
-  const sign = number > 0 ? 1 : -1
+  const sign = number >= 0 ? 1 : -1
 
   return (sign * Math.floor(Math.abs(number) * Math.pow(10, num_digits))) / Math.pow(10, num_digits)
 }
@@ -1705,6 +1716,10 @@ export function SUM() {
       result = value
     } else if (typeof value === 'number') {
       result += value
+    } else if (typeof value === 'boolean') {
+      if (value) {
+        result += 1
+      }
     } else if (typeof value === 'string') {
       const parsed = parseFloat(value)
 
@@ -1742,10 +1757,6 @@ export function SUMIF(range, criteria, sum_range) {
     return range
   }
 
-  if (criteria === undefined || criteria === null || criteria instanceof Error) {
-    return 0
-  }
-
   let result = 0
   const isWildcard = criteria === '*'
   const tokenizedCriteria = isWildcard ? null : evalExpression.parse(criteria + '')
@@ -1759,7 +1770,13 @@ export function SUMIF(range, criteria, sum_range) {
     } else {
       const tokens = [evalExpression.createToken(value, evalExpression.TOKEN_TYPE_LITERAL)].concat(tokenizedCriteria)
 
-      result += evalExpression.compute(tokens) ? sumValue : 0
+      if (evalExpression.compute(tokens)) {
+        if (sumValue instanceof Error) {
+          return sumValue
+        } else {
+          result += sumValue
+        }
+      }
     }
   }
 
@@ -1787,6 +1804,11 @@ export function SUMIFS() {
  */
 export function SUMPRODUCT() {
   if (!arguments || arguments.length === 0) {
+    return error.value
+  }
+
+  const argumentArrays = Array.from(arguments)
+  if (!argumentArrays.every((arr) => arr.length === argumentArrays[0].length)) {
     return error.value
   }
 

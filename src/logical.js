@@ -61,6 +61,10 @@ export function IF(logical_test, value_if_true, value_if_false) {
     return logical_test
   }
 
+  if (typeof logical_test === 'string') {
+    return error.value
+  }
+
   value_if_true = arguments.length >= 2 ? value_if_true : true
 
   if (value_if_true === undefined || value_if_true === null) {

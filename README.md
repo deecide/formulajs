@@ -123,3 +123,24 @@ It was then forked and extended by the [handsontable/formula.js](https://github.
 contributed by [@budnix](https://github.com/budnix).
 
 As of September 2023, the repo is officially detached from its Handsontable and Sutoiku origins.
+
+## LIBRARY FORK
+
+To build
+
+```
+yarn install
+yarn build
+```
+
+To automatically format (sometimes prevent build)
+
+```
+prettier --check --write .
+```
+
+After building, to use this fork on another project in local, run this from the other project repository :
+
+```
+yarn link "@formulajs/formulajs"
+```
