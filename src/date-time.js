@@ -252,6 +252,10 @@ export function DATEDIF(start_date, end_date, unit) {
  * @returns
  */
 export function DATEVALUE(date_text) {
+  if (date_text instanceof Error) {
+    return date_text
+  }
+
   if (typeof date_text !== 'string') {
     return error.value
   }
@@ -263,6 +267,10 @@ export function DATEVALUE(date_text) {
   }
 
   const dateValue = new Date(date_text)
+
+  if (dateValue < new Date('1900-01-01') || dateValue > new Date('9999-12-31')) {
+    return error.value
+  }
 
   return returnSerial ? dateToSerial(dateValue) : dateValue
 }
@@ -392,10 +400,26 @@ export function DAYS360(start_date, end_date, method) {
  * @returns
  */
 export function EDATE(start_date, months) {
+  if (start_date instanceof Error) {
+    return start_date
+  }
+
+  if (typeof start_date === 'boolean') {
+    return error.value
+  }
+
   start_date = utils.parseDate(start_date)
 
   if (start_date instanceof Error) {
     return start_date
+  }
+
+  if (months instanceof Error) {
+    return months
+  }
+
+  if (typeof months === 'boolean') {
+    return error.value
   }
 
   if (isNaN(months)) {
@@ -424,6 +448,10 @@ export function EDATE(start_date, months) {
   }
 
   start_date.setDate(storedDay)
+
+  if (start_date < new Date('1900-01-01') || start_date > new Date('9999-12-31')) {
+    return error.num
+  }
 
   return returnSerial ? dateToSerial(start_date) : start_date
 }

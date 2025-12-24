@@ -1699,7 +1699,19 @@ export function MAXA() {
  * @returns
  */
 export function MAXIFS() {
+  const maxRangeLength = arguments[0].length
+
+  for (let index = 1; index < arguments.length; index += 2) {
+    if (arguments[index].length !== maxRangeLength) {
+      return error.value
+    }
+  }
+
   const values = utils.applyCriteria(...arguments)
+
+  if (values instanceof Error) {
+    return values
+  }
 
   return values.length === 0 ? 0 : Math.max.apply(Math, values)
 }

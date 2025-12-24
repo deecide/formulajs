@@ -89,6 +89,14 @@ export function IF(logical_test, value_if_true, value_if_false) {
  */
 export function IFS() {
   for (let i = 0; i < arguments.length / 2; i++) {
+    if (arguments[i * 2] instanceof Error) {
+      return arguments[i * 2]
+    }
+
+    if (typeof arguments[i * 2] === 'string') {
+      return error.value
+    }
+
     if (arguments[i * 2]) {
       return arguments[i * 2 + 1]
     }
