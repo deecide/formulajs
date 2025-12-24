@@ -1,5 +1,5 @@
 {
-  "name": "@formulajs/formulajs",
+  "name": "@deecide/formulajs",
   "version": "4.5.5-1",
   "description": "JavaScript implementation of most Microsoft Excel formula functions",
   "author": "Formulajs",
