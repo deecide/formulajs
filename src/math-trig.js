@@ -1723,7 +1723,11 @@ export function SUM() {
     } else if (typeof value === 'string') {
       const parsed = parseFloat(value)
 
-      !isNaN(parsed) && (result += parsed)
+      if (isNaN(parsed)) {
+        result = error.value
+      } else {
+        result += parsed
+      }
     } else if (Array.isArray(value)) {
       const inner_result = SUM.apply(null, value)
 
@@ -1791,7 +1795,7 @@ export function SUMIF(range, criteria, sum_range) {
  * @returns
  */
 export function SUMIFS() {
-  const values = utils.applyCriteria(...arguments)
+  let values = utils.applyCriteria(...arguments)
   return SUM(values)
 }
 

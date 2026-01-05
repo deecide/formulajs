@@ -860,6 +860,7 @@ describe('Math & Trig', () => {
   })
 
   it('SUM', () => {
+    expect(mathTrig.SUM('invalid', 1)).to.equal(error.value)
     expect(mathTrig.SUM(undefined, 1)).to.equal(1)
     expect(mathTrig.SUM(1, 2, error.na)).to.equal(error.na)
     expect(mathTrig.SUM(1, error.na, 2)).to.equal(error.na)
@@ -914,7 +915,6 @@ describe('Math & Trig', () => {
         ]
       )
     ).to.equal(24)
-    expect(mathTrig.SUM(1, 'invalid')).to.equal(1)
     expect(mathTrig.SUM(undefined)).to.equal(0)
     expect(mathTrig.SUM(undefined, 1)).to.equal(1)
     expect(mathTrig.SUM(null)).to.equal(0)
@@ -969,6 +969,7 @@ describe('Math & Trig', () => {
     expect(mathTrig.SUMIFS([1, 2, 3], [4, 5, 6], '>4', [7, 8, 9], '<9')).to.equal(2)
     expect(mathTrig.SUMIFS([1, 2, 3], [4, 5, 6], '>4', [7, 8, 9], '*')).to.equal(5)
     expect(mathTrig.SUMIFS([1, 'invalid', 3], [4, 5, 6], '>4')).to.equal(error.value)
+    expect(mathTrig.SUMIFS([1, error.na, 3], [4, 5, 6], '>4')).to.equal(error.na)
   })
 
   it('SUMPRODUCT', () => {

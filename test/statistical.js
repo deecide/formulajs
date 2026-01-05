@@ -22,6 +22,9 @@ describe('Statistical', () => {
   })
 
   it('AVERAGE', () => {
+    expect(statistical.AVERAGE('pouet', 2)).to.equal(error.value)
+    expect(statistical.AVERAGE(false, 1)).to.equal(0.5)
+    expect(statistical.AVERAGE('1', '0')).to.equal(0.5)
     expect(statistical.AVERAGE(undefined)).to.equal(error.div0)
     expect(statistical.AVERAGE(2, undefined, undefined)).to.equal(2)
     expect(statistical.AVERAGE(error.na)).to.equal(error.na)
@@ -40,7 +43,7 @@ describe('Statistical', () => {
         [8, 16],
         [true, false]
       ])
-    ).to.approximately(7.5, 1e-9)
+    ).to.approximately(5.166666666, 1e-9)
   })
 
   it('AVERAGEA', () => {
@@ -618,10 +621,16 @@ describe('Statistical', () => {
   })
 
   it('MAX', () => {
+    expect(statistical.MAX(true, 0)).to.equal(1)
+    expect(statistical.MAX('coucou', 2)).to.equal(error.value)
     expect(statistical.MAX()).to.equal(0)
     expect(statistical.MAX(undefined)).to.equal(0)
+    expect(statistical.MAX(undefined, 1)).to.equal(1)
     expect(statistical.MAX(error.na)).to.equal(error.na)
-    expect(statistical.MAX([0.1, 0.2], [0.4, 0.8], [true, false])).to.approximately(0.8, 1e-9)
+    expect(statistical.MAX([0.1, 0.2], [0.4, 0.8], [true, false])).to.equal(1)
+    expect(statistical.MAX('a', 'a', 'a', 'a')).to.equal(error.value)
+    expect(statistical.MAX('4', '1')).to.equal(4)
+    expect(statistical.MAX(true, true, true, true)).to.equal(1)
     expect(
       statistical.MAX([
         [0, 0.1, 0.2],
@@ -646,13 +655,15 @@ describe('Statistical', () => {
   })
 
   it('MAXIFS', () => {
-    // expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, error.na], '>2')).to.equal(8)
-    // expect(statistical.MAXIFS([2, 4, 8, error.na], [1, 4, 4, 1], '>2')).to.equal(error.na)
+    expect(statistical.MAXIFS([2, 4, 8, error.na], [1, 4, 4, 1], '>2')).to.equal(8)
+    expect(statistical.MAXIFS(['a', 'b', 'c', 'd'], [1, 4, 4, 2], '>2')).to.equal(error.value)
+    expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, error.na], '>2')).to.equal(8)
+    expect(statistical.MAXIFS([2, 4, 8, error.na], [1, 4, 4, 1], '>0')).to.equal(error.na)
     expect(statistical.MAXIFS([2, 4, 8, 16], ['a', 'a', 'a', 'a'], 'a')).to.equal(16)
-    // expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, 1], '*')).to.equal(16)
-    // expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, 1], '>2', [1, 4, 4, 4], '>2')).to.equal(8)
-    // expect(statistical.MAXIFS([2, 4, 8, 16], [1, 2, 3, 4], '>2', [1, 1, 1, 1], '>2')).to.equal(0)
-    // expect(statistical.MAXIFS([2, 4, 8, 16], [1, 2, 3, 4], '>2', [1, 1, 1, 1], '*')).to.equal(16)
+    expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, 1], '*')).to.equal(16)
+    expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, 1], '>2', [1, 4, 4, 4], '>2')).to.equal(8)
+    expect(statistical.MAXIFS([2, 4, 8, 16], [1, 2, 3, 4], '>2', [1, 1, 1, 1], '>2')).to.equal(0)
+    expect(statistical.MAXIFS([2, 4, 8, 16], [1, 2, 3, 4], '>2', [1, 1, 1, 1], '*')).to.equal(16)
   })
 
   it('MEDIAN', () => {
@@ -665,9 +676,14 @@ describe('Statistical', () => {
 
   it('MIN', () => {
     expect(statistical.MIN()).to.equal(0)
+    expect(statistical.MIN('coucou', 2)).to.equal(error.value)
+    expect(statistical.MIN(false, 1)).to.equal(0)
     expect(statistical.MIN(undefined)).to.equal(0)
     expect(statistical.MIN(error.na)).to.equal(error.na)
-    expect(statistical.MIN([0.1, 0.2], [0.4, 0.8], [true, false])).to.approximately(0.1, 1e-9)
+    expect(statistical.MIN([0.1, 0.2], [0.4, 0.8], [true, false])).to.equal(0)
+    expect(statistical.MIN('a', 'a', 'a', 'a')).to.equal(error.value)
+    expect(statistical.MIN('4', '1')).to.equal(1)
+    expect(statistical.MIN(false, false, false, false)).to.equal(0)
     expect(statistical.MIN([0, 0.1, 0.2], [0.4, 0.8, 1], [true, false])).to.equal(0)
     expect(
       statistical.MIN(

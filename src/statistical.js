@@ -57,7 +57,12 @@ export function AVERAGE() {
     return someError
   }
 
-  const range = utils.numbers(flatArgumentsDefined)
+  const range = utils.parseNumberArray(flatArgumentsDefined)
+
+  if (range instanceof Error) {
+    return range
+  }
+
   const n = range.length
 
   let sum = 0
@@ -1663,7 +1668,17 @@ export function MAX() {
     return someError
   }
 
-  const range = utils.numbers(flatArguments)
+  if (flatArguments.length == 0) {
+    return 0
+  }
+
+  let range = utils.parseNumberArray(flatArguments)
+
+  if (range instanceof Error) {
+    return range
+  }
+
+  range = utils.numbers(range)
 
   return range.length === 0 ? 0 : Math.max.apply(Math, range)
 }
@@ -1713,7 +1728,7 @@ export function MAXIFS() {
     return values
   }
 
-  return values.length === 0 ? 0 : Math.max.apply(Math, values)
+  return values.length === 0 ? 0 : MAX(values)
 }
 
 /**
@@ -1759,7 +1774,17 @@ export function MIN() {
     return someError
   }
 
-  const range = utils.numbers(flatArguments)
+  if (flatArguments.length === 0) {
+    return 0
+  }
+
+  let range = utils.parseNumberArray(flatArguments)
+
+  if (range instanceof Error) {
+    return range
+  }
+
+  range = utils.numbers(range)
 
   return range.length === 0 ? 0 : Math.min.apply(Math, range)
 }

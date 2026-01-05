@@ -62,6 +62,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.EQ(error.na)).to.equal(error.na)
     expect(symbol.EQ(1, undefined)).to.equal(false)
     expect(symbol.EQ(1, 'string')).to.equal(false)
+
+    expect(symbol.EQ('a', 'A')).to.equal(true)
   })
 
   it('GT', () => {
@@ -79,6 +81,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.GT('a', 'a')).to.equal(false)
     expect(symbol.GT('a', 'ab')).to.equal(false)
     expect(symbol.GT('ab', 'a')).to.equal(true)
+    expect(symbol.GT('A', 'a')).to.equal(false)
+    expect(symbol.GT('a', error.na)).to.equal(error.na)
   })
 
   it('GTE', () => {
@@ -96,6 +100,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.GTE('a', 'a')).to.equal(true)
     expect(symbol.GTE('a', 'ab')).to.equal(false)
     expect(symbol.GTE('ab', 'a')).to.equal(true)
+    expect(symbol.GTE('A', 'a')).to.equal(true)
+    expect(symbol.GTE('a', error.na)).to.equal(error.na)
   })
 
   it('LT', () => {
@@ -113,6 +119,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.LT('a', 'a')).to.equal(false)
     expect(symbol.LT('a', 'ab')).to.equal(true)
     expect(symbol.LT('ab', 'a')).to.equal(false)
+    expect(symbol.LT('A', 'a')).to.equal(false)
+    expect(symbol.LT('a', error.na)).to.equal(error.na)
   })
 
   it('LTE', () => {
@@ -130,6 +138,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.LTE('a', 'a')).to.equal(true)
     expect(symbol.LTE('a', 'ab')).to.equal(true)
     expect(symbol.LTE('ab', 'a')).to.equal(false)
+    expect(symbol.LTE('A', 'a')).to.equal(true)
+    expect(symbol.LTE('a', error.na)).to.equal(error.na)
   })
 
   it('MINUS', () => {
@@ -187,6 +197,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.NE(error.na)).to.equal(error.na)
     expect(symbol.NE(1, undefined)).to.equal(true)
     expect(symbol.NE(1, 'string')).to.equal(true)
+
+    expect(symbol.NE('a', 'A')).to.equal(false)
   })
 
   it('POW', () => {

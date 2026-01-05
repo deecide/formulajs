@@ -86,6 +86,14 @@ export function EQ(value1, value2) {
     value2 = undefined
   }
 
+  if (typeof value1 === 'string') {
+    value1 = value1.toLowerCase()
+  }
+
+  if (typeof value2 === 'string') {
+    value2 = value2.toLowerCase()
+  }
+
   return value1 === value2
 }
 
@@ -101,26 +109,27 @@ export function GT(num1, num2) {
     return error.na
   }
 
-  if (num1 instanceof Error) {
-    return num1
-  }
-
-  if (num2 instanceof Error) {
-    return num2
-  }
-
   if (utils.anyIsString(num1, num2)) {
     num1 = utils.parseString(num1)
     num2 = utils.parseString(num2)
+
+    const anyError = utils.anyError(num1, num2)
+
+    if (anyError) {
+      return anyError
+    }
+
+    num1 = num1.toLowerCase()
+    num2 = num2.toLowerCase()
   } else {
     num1 = utils.parseNumber(num1)
     num2 = utils.parseNumber(num2)
-  }
 
-  const anyError = utils.anyError(num1, num2)
+    const anyError = utils.anyError(num1, num2)
 
-  if (anyError) {
-    return anyError
+    if (anyError) {
+      return anyError
+    }
   }
 
   return num1 > num2
@@ -141,15 +150,24 @@ export function GTE(num1, num2) {
   if (utils.anyIsString(num1, num2)) {
     num1 = utils.parseString(num1)
     num2 = utils.parseString(num2)
+
+    const anyError = utils.anyError(num1, num2)
+
+    if (anyError) {
+      return anyError
+    }
+
+    num1 = num1.toLowerCase()
+    num2 = num2.toLowerCase()
   } else {
     num1 = utils.parseNumber(num1)
     num2 = utils.parseNumber(num2)
-  }
 
-  const anyError = utils.anyError(num1, num2)
+    const anyError = utils.anyError(num1, num2)
 
-  if (anyError) {
-    return anyError
+    if (anyError) {
+      return anyError
+    }
   }
 
   return num1 >= num2
@@ -170,15 +188,24 @@ export function LT(num1, num2) {
   if (utils.anyIsString(num1, num2)) {
     num1 = utils.parseString(num1)
     num2 = utils.parseString(num2)
+
+    const anyError = utils.anyError(num1, num2)
+
+    if (anyError) {
+      return anyError
+    }
+
+    num1 = num1.toLowerCase()
+    num2 = num2.toLowerCase()
   } else {
     num1 = utils.parseNumber(num1)
     num2 = utils.parseNumber(num2)
-  }
 
-  const anyError = utils.anyError(num1, num2)
+    const anyError = utils.anyError(num1, num2)
 
-  if (anyError) {
-    return anyError
+    if (anyError) {
+      return anyError
+    }
   }
 
   return num1 < num2
@@ -199,15 +226,24 @@ export function LTE(num1, num2) {
   if (utils.anyIsString(num1, num2)) {
     num1 = utils.parseString(num1)
     num2 = utils.parseString(num2)
+
+    const anyError = utils.anyError(num1, num2)
+
+    if (anyError) {
+      return anyError
+    }
+
+    num1 = num1.toLowerCase()
+    num2 = num2.toLowerCase()
   } else {
     num1 = utils.parseNumber(num1)
     num2 = utils.parseNumber(num2)
-  }
 
-  const anyError = utils.anyError(num1, num2)
+    const anyError = utils.anyError(num1, num2)
 
-  if (anyError) {
-    return anyError
+    if (anyError) {
+      return anyError
+    }
   }
 
   return num1 <= num2
@@ -285,6 +321,14 @@ export function NE(value1, value2) {
 
   if (value2 === null) {
     value2 = undefined
+  }
+
+  if (typeof value1 === 'string') {
+    value1 = value1.toLowerCase()
+  }
+
+  if (typeof value2 === 'string') {
+    value2 = value2.toLowerCase()
   }
 
   return value1 !== value2

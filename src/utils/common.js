@@ -341,6 +341,32 @@ export function parseNumber(string) {
   return error.value
 }
 
+export function parseNumberArrayAndKeepErrors(arr) {
+  let len
+
+  if (!arr || (len = arr.length) === 0) {
+    return error.value
+  }
+
+  let parsed
+
+  while (len--) {
+    if (arr[len] instanceof Error) {
+      parsed = arr[len]
+    } else {
+      parsed = parseNumber(arr[len])
+
+      if (parsed instanceof Error) {
+        return parsed
+      }
+    }
+
+    arr[len] = parsed
+  }
+
+  return arr
+}
+
 export function parseNumberArray(arr) {
   let len
 
@@ -397,7 +423,7 @@ export function anyIsString() {
 //Returns an array containing the values that satisfy all the specified criteria.
 export function applyCriteria() {
   const args = argsToArray(arguments)
-  const range = parseNumberArray(flatten(args.shift()))
+  const range = parseNumberArrayAndKeepErrors(flatten(args.shift()))
   if (range instanceof Error) {
     return range
   }

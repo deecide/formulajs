@@ -144,3 +144,9 @@ After building, to use this fork on another project in local, run this from the 
 ```
 yarn link "@formulajs/formulajs"
 ```
+
+To publish on npm
+
+```
+npm publish
+```
