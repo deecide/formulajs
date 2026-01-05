@@ -150,3 +150,20 @@ To publish on npm
 ```
 npm publish
 ```
+
+To merge new developments from the original lib
+
+Add the original lib to the remote list
+
+```
+git remote add upstream git@github.com:formulajs/formulajs.git
+```
+
+Then
+
+```
+git fetch upstream
+git merge upstream/master
+```
+
+And fix the conflicts !
