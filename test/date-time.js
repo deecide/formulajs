@@ -48,6 +48,8 @@ describe('Date & Time', () => {
   })
 
   it('DATEDIF', () => {
+    expect(dateTime.DATEDIF('pouet', '1/1/2003', 'Y')).to.equal(error.value)
+    expect(dateTime.DATEDIF('1/1/2003', 'pouet', 'Y')).to.equal(error.value)
     expect(dateTime.DATEDIF('1/1/2001', '1/1/2003', 'Y')).to.equal(2)
     expect(dateTime.DATEDIF('1/1/2001', '3/1/2003', 'Y')).to.equal(2)
     expect(dateTime.DATEDIF('6/1/2001', '8/15/2002', 'D')).to.equal(440)

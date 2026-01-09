@@ -180,6 +180,14 @@ export function DATEDIF(start_date, end_date, unit) {
     return error.num
   }
 
+  if (start_date instanceof Error) {
+    return start_date
+  }
+
+  if (end_date instanceof Error) {
+    return end_date
+  }
+
   const start_date_year = start_date.getFullYear()
   const start_date_month = start_date.getMonth()
   const start_date_day = start_date.getDate()
