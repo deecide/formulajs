@@ -139,10 +139,12 @@ To automatically format (sometimes prevent build)
 prettier --check --write .
 ```
 
-After building, to use this fork on another project in local, run this from the other project repository :
+After building, to use this fork on another project in local, first run `yarn link` in this repository if not done already.
+
+Then, run this from the other project repository :
 
 ```
-yarn link "@formulajs/formulajs"
+yarn link "@deecide/formulajs"
 (and unlink to do restore deployed version)
 ```
 

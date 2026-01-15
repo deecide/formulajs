@@ -1806,7 +1806,20 @@ export function SUMIF(range, criteria, sum_range) {
  * @returns
  */
 export function SUMIFS() {
+  const sumRangeLength = arguments[0].length
+
+  for (let index = 1; index < arguments.length; index += 2) {
+    if (arguments[index].length !== sumRangeLength) {
+      return error.value
+    }
+  }
+
   let values = utils.applyCriteria(...arguments)
+
+  if (values instanceof Error) {
+    return values
+  }
+
   return SUM(values)
 }
 

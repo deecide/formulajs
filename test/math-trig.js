@@ -970,6 +970,10 @@ describe('Math & Trig', () => {
   })
 
   it('SUMIFS', () => {
+    expect(mathTrig.SUMIFS([2, 4, 8, 16], ['a', 'a', 'a', 'a'], 'a')).to.equal(30)
+    expect(mathTrig.SUMIFS([2, 4, 8, 16], [1, 4, 4, error.na], '>2')).to.equal(12)
+    expect(mathTrig.SUMIFS([2, 4, 8, error.na], [1, 4, 4, 1], '>2')).to.equal(12)
+    expect(mathTrig.SUMIFS(['a', 'b', 'c', 'd'], [1, 4, 4, 2], '>2')).to.equal(error.value)
     expect(mathTrig.SUMIFS([1, 2, 3], [4, 5, 6], '>4', [7, 8, 9], '<9')).to.equal(2)
     expect(mathTrig.SUMIFS([1, 2, 3], [4, 5, 6], '>4', [7, 8, 9], '*')).to.equal(5)
     expect(mathTrig.SUMIFS([1, 'invalid', 3], [4, 5, 6], '>4')).to.equal(error.value)
