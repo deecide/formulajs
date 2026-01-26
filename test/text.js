@@ -398,6 +398,7 @@ describe('Text', () => {
     })
 
     it('should thrown an error in case of malformed input', () => {
+      expect(text.VALUE('pouet')).to.equal(error.value)
       expect(text.VALUE('SOMETEXT')).to.equal(error.value)
       expect(text.VALUE('2+2')).to.equal(error.value)
       expect(text.VALUE('3%22')).to.equal(error.value)
@@ -441,7 +442,7 @@ describe('Text', () => {
      * These test cases illustrate permissive input cases. They do not mirror exactly Excel behaviors.
      */
     it('could be less permissive', () => {
-      expect(text.VALUE('EUR1000')).to.equal(1000)
+      expect(text.VALUE('EUR1000')).to.equal(error.value)
     })
   })
 })

@@ -79,6 +79,8 @@ describe('Lookup Reference', () => {
     })
 
     it('should return the following values', () => {
+      expect(lookup.MATCH(true, ['pouet', true], 0)).to.equal(2)
+      expect(lookup.MATCH(true, ['test', true], 1)).to.equal(error.na)
       expect(lookup.MATCH(0, [7, 1, 0, 3, 4, 100, 7], 0)).to.equal(3)
       expect(lookup.MATCH(1, [0, 1, 2, 3, 4, 100, 7])).to.equal(2)
       expect(lookup.MATCH(1, [[0], [1], [2], [3], [4]])).to.equal(2)

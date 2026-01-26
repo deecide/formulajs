@@ -758,26 +758,32 @@ export function VALUE(text) {
     return error.value
   }
 
-  const isPercent = /(%)$/.test(text) || /^(%)/.test(text)
-  text = text.replace(/^[^0-9-]{0,3}/, '')
-  text = text.replace(/[^0-9]{0,3}$/, '')
-  text = text.replace(/[ ,]/g, '')
+  const original = text.trim()
 
-  if (text === '') {
+  if (original === '') {
     return 0
   }
 
-  let output = Number(text)
+  const isPercent = /(%)$/.test(original) || /^(%)/.test(original)
 
-  if (isNaN(output)) {
+  let cleaned = original
+  cleaned = cleaned.replace(/^[^0-9-+.eE]{0,3}/, '')
+  cleaned = cleaned.replace(/[^0-9.eE]{0,3}$/, '')
+  cleaned = cleaned.replace(/[ ,]/g, '')
+
+  if (cleaned === '' || cleaned === '-' || cleaned === '+') {
     return error.value
   }
 
-  output = output || 0
-
-  if (isPercent) {
-    output = output * 0.01
+  if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(cleaned)) {
+    return error.value
   }
 
-  return output
+  const output = Number(cleaned)
+
+  if (isNaN(output) || !isFinite(output)) {
+    return error.value
+  }
+
+  return isPercent ? output * 0.01 : output
 }
