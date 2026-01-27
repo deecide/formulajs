@@ -348,6 +348,18 @@ export function LOWER(text) {
  * @returns
  */
 export function MID(text, start_num, num_chars) {
+  if (text instanceof Error) {
+    return text
+  }
+
+  if (start_num instanceof Error) {
+    return start_num
+  }
+
+  if (num_chars instanceof Error) {
+    return num_chars
+  }
+
   if (start_num === undefined || start_num === null) {
     return error.value
   }
@@ -355,8 +367,24 @@ export function MID(text, start_num, num_chars) {
   start_num = utils.parseNumber(start_num)
   num_chars = utils.parseNumber(num_chars)
 
-  if (utils.anyIsError(start_num, num_chars) || typeof text !== 'string') {
+  if (utils.anyIsError(start_num, num_chars)) {
     return num_chars
+  }
+
+  if (start_num <= 0) {
+    return error.value
+  }
+
+  if (num_chars < 0) {
+    return error.value
+  }
+
+  if (text === undefined || text === null) {
+    text = ''
+  }
+
+  if (typeof text !== 'string') {
+    text = text.toString()
   }
 
   const begin = start_num - 1

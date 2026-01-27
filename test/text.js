@@ -141,10 +141,23 @@ describe('Text', () => {
 
   it('MID', () => {
     const data = 'Fluid Flow'
+    expect(text.MID(1234, 2, 1)).to.equal('2')
+    expect(text.MID(true, 2, 1)).to.equal('r')
     expect(text.MID(data, 1, 5)).to.equal('Fluid')
     expect(text.MID(data, 7, 20)).to.equal('Flow')
     expect(text.MID(data, 20, 50)).to.equal('')
     expect(text.MID(0)).to.equal(error.value)
+    expect(text.MID(null, null, null)).to.equal(error.value)
+    expect(text.MID('test', null, null)).to.equal(error.value)
+    expect(text.MID(null, 1, null)).to.equal('')
+    expect(text.MID(null, null, 1)).to.equal(error.value)
+    expect(text.MID('test', 'p', 't')).to.equal(error.value)
+    expect(text.MID(error.na, 1, 5)).to.equal(error.na)
+    expect(text.MID(data, error.na, 5)).to.equal(error.na)
+    expect(text.MID(data, 1, error.na)).to.equal(error.na)
+    expect(text.MID(data, 0, 1)).to.equal(error.value)
+    expect(text.MID(data, -1, 1)).to.equal(error.value)
+    expect(text.MID(data, 1, -1)).to.equal(error.value)
   })
 
   describe('NUMBERVALUE', () => {
