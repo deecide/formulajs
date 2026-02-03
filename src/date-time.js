@@ -330,6 +330,22 @@ function startOfDay(date) {
  * @returns
  */
 export function DAYS(end_date, start_date) {
+  if (end_date instanceof Error) {
+    return end_date
+  }
+
+  if (start_date instanceof Error) {
+    return start_date
+  }
+
+  if (typeof end_date === 'boolean') {
+    end_date = utils.parseNumber(end_date)
+  }
+
+  if (typeof start_date === 'boolean') {
+    start_date = utils.parseNumber(start_date)
+  }
+
   end_date = utils.parseDate(end_date)
   start_date = utils.parseDate(start_date)
 

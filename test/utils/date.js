@@ -23,6 +23,12 @@ describe('Date & Time utils', () => {
   describe('dateToSerial ', () => {
     it('should convert JS Date to Serial', () => {
       expect(dateUtils.dateToSerial(new Date(1900, 0, 1))).to.equal(1)
+      expect(dateUtils.dateToSerial(new Date(1900, 0, 31))).to.equal(31)
+      expect(dateUtils.dateToSerial(new Date(1900, 1, 28))).to.equal(59)
+      expect(dateUtils.dateToSerial(new Date(1900, 1, 29))).to.equal(60)
+      // Excel returns 61 because Excel is shit and believe 29/02/1900 exists while it does not, need to handle to in ExcelTranscoder
+      expect(dateUtils.dateToSerial(new Date(1900, 2, 1))).to.equal(60)
+      expect(dateUtils.dateToSerial(new Date(1900, 2, 2))).to.equal(62)
     })
   })
 

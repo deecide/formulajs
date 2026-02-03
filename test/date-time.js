@@ -96,13 +96,21 @@ describe('Date & Time', () => {
   })
 
   it('DAYS', () => {
+    // expect(dateTime.DAYS(error.na, 1)).to.equal(error.na)
+    expect(dateTime.DAYS(true, 0)).to.equal(1)
+    expect(dateTime.DAYS(false, 0)).to.equal(0)
     expect(dateTime.DAYS(2, 1)).to.equal(1)
     expect(dateTime.DAYS('1/2/1900', '1/1/1900')).to.equal(1)
     expect(dateTime.DAYS(new Date(1900, 1, 2), new Date(1900, 1, 1))).to.equal(1)
+    expect(dateTime.DAYS(new Date(2021, 2, 19), new Date(1900, 1, 28))).to.equal(44215)
+    expect(dateTime.DAYS(new Date(2021, 2, 19), new Date(1900, 1, 29))).to.equal(44214)
+    expect(dateTime.DAYS(new Date(2021, 2, 19), new Date(1900, 2, 1))).to.equal(44214)
     expect(dateTime.DAYS('a', 1)).to.equal(error.value)
     expect(dateTime.DAYS(1, 'a')).to.equal(error.value)
     expect(dateTime.DAYS('1/1/1900 00:20', '1/1/1900 01:30')).to.equal(0)
     expect(dateTime.DAYS(dateTime.NOW(), dateTime.TODAY())).to.equal(0)
+    // It's an error we'll have to live with (should be 44215)
+    expect(dateTime.DAYS(44274, 59)).to.equal(44214)
   })
 
   it('DAYS360', () => {
