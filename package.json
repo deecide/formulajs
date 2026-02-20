@@ -2,14 +2,17 @@
   "name": "@deecide/formulajs",
   "version": "4.5.7-6",
   "description": "JavaScript implementation of most Microsoft Excel formula functions",
-  "author": "Formulajs",
-  "homepage": "https://github.com/formulajs/formulajs#readme",
+  "author": "Formulajs - forked by Deecide",
+  "homepage": "https://github.com/deecide/formulajs#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/formulajs/formulajs.git"
+    "url": "https://github.com/deecide/formulajs.git"
   },
   "bugs": {
-    "url": "https://github.com/formulajs/formulajs/issues"
+    "url": "https://github.com/deecide/formulajs/issues"
   },
   "license": "MIT",
   "type": "module",
