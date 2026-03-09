@@ -14,6 +14,7 @@ describe('Utils => Common', () => {
     it('arrayValuesToNumbers', () => {
       expect(utils.arrayValuesToNumbers(['1.4'])).to.deep.equal([1.4])
       expect(utils.arrayValuesToNumbers(['not convertible'])).to.deep.equal([0])
+      expect(utils.arrayValuesToNumbers([true, false])).to.deep.equal([1, 0])
     })
 
     it('initial', () => {
@@ -335,6 +336,15 @@ describe('Utils => Common', () => {
       expect(utils.parseNumber(2)).to.equal(2)
       expect(utils.parseNumber(error.na)).to.equal(error.na)
       expect(utils.parseNumber('text')).to.equal(error.value)
+    })
+
+    it('parseDecimal', () => {
+      expect(utils.parseDecimal().toNumber()).to.equal(0)
+      expect(utils.parseDecimal(null).toNumber()).to.equal(0)
+      expect(utils.parseDecimal('')).to.equal(error.value)
+      expect(utils.parseDecimal(2).toNumber()).to.equal(2)
+      expect(utils.parseDecimal(error.na)).to.equal(error.na)
+      expect(utils.parseDecimal('text')).to.equal(error.value)
     })
 
     it('parseNumberArray', () => {

@@ -7,6 +7,7 @@ import * as lookup from './lookup-reference.js'
 import * as utils from './utils/common.js'
 
 import { T } from './text.js'
+import Decimal from 'decimal.js'
 
 const SQRT2PI = 2.5066282746310002
 
@@ -57,7 +58,7 @@ export function AVERAGE() {
     return someError
   }
 
-  const range = utils.parseNumberArray(flatArgumentsDefined)
+  const range = utils.parseDecimalArray(flatArgumentsDefined)
 
   if (range instanceof Error) {
     return range
@@ -65,22 +66,22 @@ export function AVERAGE() {
 
   const n = range.length
 
-  let sum = 0
+  let sum = new Decimal(0)
   let count = 0
   let result
 
   for (let i = 0; i < n; i++) {
-    sum += range[i]
+    sum = Decimal.add(sum, range[i])
     count += 1
   }
 
-  result = sum / count
+  result = Decimal.div(sum, count)
 
   if (isNaN(result)) {
     result = error.num
   }
 
-  return result
+  return result.toNumber()
 }
 
 /**

@@ -1,6 +1,7 @@
 import * as error from './error.js'
 import * as evalExpression from './criteria-eval.js'
 import { serialToDate } from './date.js'
+import Decimal from 'decimal.js'
 
 // Arrays
 export function argsToArray(args) {
@@ -341,6 +342,26 @@ export function parseNumber(string) {
   return error.value
 }
 
+export function parseDecimal(string) {
+  if (string instanceof Error) {
+    return string
+  }
+
+  if (string === undefined || string === null) {
+    return new Decimal(0)
+  }
+
+  if (typeof string === 'boolean') {
+    string = +string
+  }
+
+  if (!isNaN(string) && string !== '') {
+    return new Decimal(string)
+  }
+
+  return error.value
+}
+
 export function parseNumberArrayAndKeepErrors(arr) {
   let len
 
@@ -382,6 +403,32 @@ export function parseNumberArray(arr) {
     }
 
     parsed = parseNumber(arr[len])
+
+    if (parsed instanceof Error) {
+      return parsed
+    }
+
+    arr[len] = parsed
+  }
+
+  return arr
+}
+
+export function parseDecimalArray(arr) {
+  let len
+
+  if (!arr || (len = arr.length) === 0) {
+    return error.value
+  }
+
+  let parsed
+
+  while (len--) {
+    if (arr[len] instanceof Error) {
+      return arr[len]
+    }
+
+    parsed = parseDecimal(arr[len])
 
     if (parsed instanceof Error) {
       return parsed
@@ -475,4 +522,8 @@ export function applyCriteria() {
 
 export function isDefined(arg) {
   return arg !== undefined && arg !== null
+}
+
+export function isDecimal(value) {
+  return value instanceof Decimal
 }

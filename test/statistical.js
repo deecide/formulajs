@@ -22,6 +22,7 @@ describe('Statistical', () => {
   })
 
   it('AVERAGE', () => {
+    expect(statistical.AVERAGE(0.1, 0.2)).to.equal(0.15)
     expect(statistical.AVERAGE('pouet', 2)).to.equal(error.value)
     expect(statistical.AVERAGE(false, 1)).to.equal(0.5)
     expect(statistical.AVERAGE('1', '0')).to.equal(0.5)
@@ -199,6 +200,7 @@ describe('Statistical', () => {
     expect(statistical.COUNT(undefined)).to.equal(0)
     expect(statistical.COUNT(error.na)).to.equal(0)
     expect(statistical.COUNT(1, 2, 3, 4)).to.equal(4)
+    expect(statistical.COUNT(0.1, 0.2)).to.equal(2)
     expect(statistical.COUNT(1, 2, error.div0, 4)).to.equal(3)
     expect(statistical.COUNT([1, 2, 3, 4])).to.equal(4)
     expect(statistical.COUNT([1, 2], [3, 4])).to.equal(4)
@@ -229,6 +231,7 @@ describe('Statistical', () => {
     expect(statistical.COUNTA(undefined)).to.equal(0)
     expect(statistical.COUNTA(error.na)).to.equal(1)
     expect(statistical.COUNTA(1, 2, error.div0)).to.equal(3)
+    expect(statistical.COUNTA(0.1, 0.2)).to.equal(2)
     expect(statistical.COUNTA(1, null, 3, 'a', '', 'c')).to.equal(4)
     expect(statistical.COUNTA([1, null, 3, 'a', '', 'c'])).to.equal(4)
     expect(statistical.COUNTA([1, null, 3], ['a', '', 'c'])).to.equal(4)
@@ -245,6 +248,7 @@ describe('Statistical', () => {
     expect(statistical.COUNTBLANK(undefined)).to.equal(1)
     expect(statistical.COUNTBLANK(error.na)).to.equal(0)
     expect(statistical.COUNTBLANK(1, 2, error.div0)).to.equal(0)
+    expect(statistical.COUNTBLANK(0.1, 0.2)).to.equal(0)
     expect(statistical.COUNTBLANK(1, null, 3, 'a', '', 'c')).to.equal(2)
     expect(statistical.COUNTBLANK([1, null, 3, 'a', '', 'c'])).to.equal(2)
     expect(statistical.COUNTBLANK([1, null, 3], ['a', '', 'c'])).to.equal(2)
@@ -259,6 +263,7 @@ describe('Statistical', () => {
   it('COUNTIF', () => {
     expect(statistical.COUNTIF([true, false], '=1')).to.equal(1)
     expect(statistical.COUNTIF([undefined], '>1')).to.equal(0)
+    expect(statistical.COUNTIF([0.1, 0.2], '>0')).to.equal(2)
     expect(statistical.COUNTIF([error.na], '>1')).to.equal(0)
     expect(statistical.COUNTIF([1, null, 3, 'a', ''], '>1')).to.equal(1)
     expect(statistical.COUNTIF([1, null, 'c', 'a', ''], '>1')).to.equal(0)
@@ -292,6 +297,7 @@ describe('Statistical', () => {
   })
 
   it('COUNTIFS', () => {
+    expect(statistical.COUNTIFS([0.1, 0.2], '>0')).to.equal(2)
     expect(statistical.COUNTIFS([undefined], '>1')).to.equal(0)
     expect(statistical.COUNTIFS([error.na], '>1')).to.equal(0)
     expect(statistical.COUNTIFS([1, null, 3, 'a', ''], '>1')).to.equal(1)
@@ -623,6 +629,7 @@ describe('Statistical', () => {
 
   it('MAX', () => {
     expect(statistical.MAX(true, 0)).to.equal(1)
+    expect(statistical.MAX(0.1, 0.2)).to.equal(0.2)
     expect(statistical.MAX('coucou', 2)).to.equal(error.value)
     expect(statistical.MAX()).to.equal(0)
     expect(statistical.MAX(undefined)).to.equal(0)
@@ -656,6 +663,7 @@ describe('Statistical', () => {
   })
 
   it('MAXIFS', () => {
+    expect(statistical.MAXIFS([0.1, 0.2], [1, 4], '>2')).to.equal(0.2)
     expect(statistical.MAXIFS([2, 4, 8, error.na], [1, 4, 4, 1], '>2')).to.equal(8)
     expect(statistical.MAXIFS(['a', 'b', 'c', 'd'], [1, 4, 4, 2], '>2')).to.equal(error.value)
     expect(statistical.MAXIFS([2, 4, 8, 16], [1, 4, 4, error.na], '>2')).to.equal(8)
@@ -677,6 +685,7 @@ describe('Statistical', () => {
 
   it('MIN', () => {
     expect(statistical.MIN()).to.equal(0)
+    expect(statistical.MIN(0.1, 0.2)).to.equal(0.1)
     expect(statistical.MIN('coucou', 2)).to.equal(error.value)
     expect(statistical.MIN(false, 1)).to.equal(0)
     expect(statistical.MIN(undefined)).to.equal(0)

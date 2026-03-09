@@ -2,9 +2,11 @@ import { expect } from 'chai'
 
 import * as error from '../../src/utils/error.js'
 import * as symbol from '../../src/utils/symbol.js'
+import Decimal from 'decimal.js'
 
 describe('Utils => Symbol', () => {
   it('ADD', () => {
+    expect(symbol.ADD(0.1, 0.2)).to.equal(0.3)
     expect(symbol.ADD(10, 4)).to.equal(14)
     expect(symbol.ADD(1.2, 4)).to.equal(5.2)
     expect(symbol.ADD(1, 'string')).to.equal(error.value)
@@ -46,6 +48,10 @@ describe('Utils => Symbol', () => {
   })
 
   it('EQ', () => {
+    expect(symbol.EQ(0, -0)).to.equal(true)
+    expect(symbol.EQ(0, 1e-324)).to.equal(true)
+    expect(symbol.EQ(0, '1e-324')).to.equal(false)
+    expect(symbol.EQ(0.1, Decimal(0.3).minus(0.2).toNumber())).to.equal(true)
     expect(symbol.EQ(10, 10)).to.equal(true)
     expect(symbol.EQ(1.2, 1.2)).to.equal(true)
     expect(symbol.EQ('hello', 'jim')).to.equal(false)
@@ -161,6 +167,7 @@ describe('Utils => Symbol', () => {
   })
 
   it('MULTIPLY', () => {
+    expect(symbol.MULTIPLY(0.1, 0.2)).to.equal(0.02)
     expect(symbol.MULTIPLY(10, 4)).to.equal(40)
     expect(symbol.MULTIPLY(12, -6)).to.equal(-72)
     expect(symbol.MULTIPLY(0, 0)).to.equal(0)
@@ -182,6 +189,10 @@ describe('Utils => Symbol', () => {
   })
 
   it('NE', () => {
+    expect(symbol.NE(0, -0)).to.equal(false)
+    expect(symbol.NE(0, 1e-324)).to.equal(false)
+    expect(symbol.NE(0, '1e-324')).to.equal(true)
+    expect(symbol.NE(0.1, Decimal(0.3).minus(0.2).toNumber())).to.equal(false)
     expect(symbol.NE(10, 10)).to.equal(false)
     expect(symbol.NE(1.2, 1.2)).to.equal(false)
     expect(symbol.NE('hello', 'jim')).to.equal(true)
@@ -202,6 +213,7 @@ describe('Utils => Symbol', () => {
   })
 
   it('POW', () => {
+    expect(symbol.POW(2.4, 12.3)).to.equal(47489.57391734791)
     expect(symbol.POW(undefined, undefined)).to.equal(error.num)
     expect(symbol.POW(undefined, 2)).to.equal(0)
     expect(symbol.POW(5, undefined)).to.equal(1)
@@ -209,8 +221,8 @@ describe('Utils => Symbol', () => {
     expect(symbol.POW(5, error.na)).to.equal(error.na)
     expect(symbol.POW(5)).to.equal(error.na)
     expect(symbol.POW(5, 2)).to.equal(25)
-    expect(symbol.POW(98.6, 3.2)).to.approximately(2401077.2220695773, 1e-9)
-    expect(symbol.POW(4, 5 / 4)).to.approximately(5.656854249492381, 1e-9)
+    expect(symbol.POW(98.6, 3.2)).to.equal(2401077.222069576)
+    expect(symbol.POW(4, Decimal(5).div(4).toNumber())).to.equals(5.656854249492381)
     expect(symbol.POW(-1, 0.5)).to.equal(error.num)
     expect(symbol.POW(-1, 'invalid')).to.equal(error.value)
   })

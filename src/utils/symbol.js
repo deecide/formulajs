@@ -2,6 +2,7 @@ import * as error from './error.js'
 import * as utils from './common.js'
 
 import { POWER } from './../math-trig.js'
+import Decimal from 'decimal.js'
 
 /**
  * Following functions are part of Formula.js only and not found in Excel.
@@ -20,15 +21,15 @@ export function ADD(num1, num2) {
     return error.na
   }
 
-  num1 = utils.parseNumber(num1)
-  num2 = utils.parseNumber(num2)
+  num1 = utils.parseDecimal(num1)
+  num2 = utils.parseDecimal(num2)
   const anyError = utils.anyError(num1, num2)
 
   if (anyError) {
     return anyError
   }
 
-  return num1 + num2
+  return Decimal.add(num1, num2).toNumber()
 }
 
 /**
@@ -43,19 +44,19 @@ export function DIVIDE(dividend, divisor) {
     return error.na
   }
 
-  dividend = utils.parseNumber(dividend)
-  divisor = utils.parseNumber(divisor)
+  dividend = utils.parseDecimal(dividend)
+  divisor = utils.parseDecimal(divisor)
   const anyError = utils.anyError(dividend, divisor)
 
   if (anyError) {
     return anyError
   }
 
-  if (divisor === 0) {
+  if (divisor.isZero()) {
     return error.div0
   }
 
-  return dividend / divisor
+  return Decimal.div(dividend, divisor).toNumber()
 }
 
 /**
@@ -94,7 +95,14 @@ export function EQ(value1, value2) {
     value2 = value2.toLowerCase()
   }
 
-  return value1 === value2
+  if (typeof value1 === 'number' && typeof value2 === 'number') {
+    value1 = utils.parseDecimal(value1)
+    value2 = utils.parseDecimal(value2)
+
+    return value1.eq(value2)
+  } else {
+    return value1 === value2
+  }
 }
 
 /**
@@ -121,18 +129,20 @@ export function GT(num1, num2) {
 
     num1 = num1.toLowerCase()
     num2 = num2.toLowerCase()
+
+    return num1 > num2
   } else {
-    num1 = utils.parseNumber(num1)
-    num2 = utils.parseNumber(num2)
+    num1 = utils.parseDecimal(num1)
+    num2 = utils.parseDecimal(num2)
 
     const anyError = utils.anyError(num1, num2)
 
     if (anyError) {
       return anyError
     }
-  }
 
-  return num1 > num2
+    return num1.gt(num2)
+  }
 }
 
 /**
@@ -159,18 +169,20 @@ export function GTE(num1, num2) {
 
     num1 = num1.toLowerCase()
     num2 = num2.toLowerCase()
+
+    return num1 >= num2
   } else {
-    num1 = utils.parseNumber(num1)
-    num2 = utils.parseNumber(num2)
+    num1 = utils.parseDecimal(num1)
+    num2 = utils.parseDecimal(num2)
 
     const anyError = utils.anyError(num1, num2)
 
     if (anyError) {
       return anyError
     }
-  }
 
-  return num1 >= num2
+    return num1.gte(num2)
+  }
 }
 
 /**
@@ -197,18 +209,20 @@ export function LT(num1, num2) {
 
     num1 = num1.toLowerCase()
     num2 = num2.toLowerCase()
+
+    return num1 < num2
   } else {
-    num1 = utils.parseNumber(num1)
-    num2 = utils.parseNumber(num2)
+    num1 = utils.parseDecimal(num1)
+    num2 = utils.parseDecimal(num2)
 
     const anyError = utils.anyError(num1, num2)
 
     if (anyError) {
       return anyError
     }
-  }
 
-  return num1 < num2
+    return num1.lt(num2)
+  }
 }
 
 /**
@@ -235,18 +249,20 @@ export function LTE(num1, num2) {
 
     num1 = num1.toLowerCase()
     num2 = num2.toLowerCase()
+
+    return num1 <= num2
   } else {
-    num1 = utils.parseNumber(num1)
-    num2 = utils.parseNumber(num2)
+    num1 = utils.parseDecimal(num1)
+    num2 = utils.parseDecimal(num2)
 
     const anyError = utils.anyError(num1, num2)
 
     if (anyError) {
       return anyError
     }
-  }
 
-  return num1 <= num2
+    return num1.lte(num2)
+  }
 }
 
 /**
@@ -269,7 +285,7 @@ export function MINUS(num1, num2) {
     return anyError
   }
 
-  return num1 - num2
+  return Decimal.sub(num1, num2).toNumber()
 }
 
 /**
@@ -284,15 +300,15 @@ export function MULTIPLY(factor1, factor2) {
     return error.na
   }
 
-  factor1 = utils.parseNumber(factor1)
-  factor2 = utils.parseNumber(factor2)
+  factor1 = utils.parseDecimal(factor1)
+  factor2 = utils.parseDecimal(factor2)
   const anyError = utils.anyError(factor1, factor2)
 
   if (anyError) {
     return anyError
   }
 
-  return factor1 * factor2
+  return Decimal.mul(factor1, factor2).toNumber()
 }
 
 /**
@@ -331,7 +347,14 @@ export function NE(value1, value2) {
     value2 = value2.toLowerCase()
   }
 
-  return value1 !== value2
+  if (typeof value1 === 'number' && typeof value2 === 'number') {
+    value1 = utils.parseDecimal(value1)
+    value2 = utils.parseDecimal(value2)
+
+    return !value1.eq(value2)
+  } else {
+    return value1 !== value2
+  }
 }
 
 /**
