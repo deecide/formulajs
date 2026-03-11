@@ -109,7 +109,11 @@ export function EQ(value1, value2) {
 
     return value1.eq(value2)
   } else {
-    return value1 === value2
+    if ((value1 === undefined && value2 === '') || (value1 === '' && value2 === undefined)) {
+      return true
+    } else {
+      return value1 === value2
+    }
   }
 }
 
@@ -369,7 +373,11 @@ export function NE(value1, value2) {
 
     return !value1.eq(value2)
   } else {
-    return value1 !== value2
+    if ((value1 === undefined && value2 === '') || (value1 === '' && value2 === undefined)) {
+      return false
+    } else {
+      return value1 !== value2
+    }
   }
 }
 

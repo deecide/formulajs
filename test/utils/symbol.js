@@ -53,6 +53,7 @@ describe('Utils => Symbol', () => {
   })
 
   it('EQ', () => {
+    expect(symbol.EQ(utils.blank, '')).to.equal(true)
     expect(symbol.EQ(0, -0)).to.equal(true)
     expect(symbol.EQ(0, 1e-324)).to.equal(true)
     expect(symbol.EQ(0, '1e-324')).to.equal(false)
@@ -212,6 +213,7 @@ describe('Utils => Symbol', () => {
   })
 
   it('NE', () => {
+    expect(symbol.NE(utils.blank, '')).to.equal(false)
     expect(symbol.NE(0, -0)).to.equal(false)
     expect(symbol.NE(0, 1e-324)).to.equal(false)
     expect(symbol.NE(0, '1e-324')).to.equal(true)
