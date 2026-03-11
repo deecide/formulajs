@@ -93,7 +93,7 @@ export function CONCATENATE() {
     args[falseFound] = 'FALSE'
   }
 
-  return args.join('')
+  return utils.removeBlankValues(args).join('')
 }
 
 export const CONCAT = CONCATENATE
@@ -184,6 +184,10 @@ export function FIND(find_text, within_text, start_num) {
     return error.value
   }
 
+  if (start_num instanceof global.BlankValue) {
+    return error.value
+  }
+
   if (start_num <= 0) {
     return error.value
   }
@@ -235,6 +239,10 @@ export function FIXED(number, decimals = 2, no_commas = false) {
     number = Math.round(number / factor) * factor
   } else {
     number = number.toFixed(decimals)
+  }
+
+  if (no_commas instanceof global.BlankValue) {
+    no_commas = false
   }
 
   if (no_commas) {
@@ -360,7 +368,7 @@ export function MID(text, start_num, num_chars) {
     return num_chars
   }
 
-  if (start_num === undefined || start_num === null) {
+  if (start_num === undefined || start_num === null || start_num instanceof global.BlankValue) {
     return error.value
   }
 
@@ -379,7 +387,7 @@ export function MID(text, start_num, num_chars) {
     return error.value
   }
 
-  if (text === undefined || text === null) {
+  if (text === undefined || text === null || text instanceof global.BlankValue) {
     text = ''
   }
 
@@ -778,7 +786,7 @@ export function VALUE(text) {
     return text
   }
 
-  if (!utils.isDefined(text)) {
+  if (!utils.isDefined(text) || text instanceof global.BlankValue) {
     text = ''
   }
 

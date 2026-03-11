@@ -2,6 +2,7 @@ import { expect } from 'chai'
 
 import * as error from '../src/utils/error.js'
 import * as information from '../src/information.js'
+import * as utils from '../src/utils/common.js'
 
 describe('Information', () => {
   it('ERROR.TYPE', () => {
@@ -17,6 +18,7 @@ describe('Information', () => {
   })
 
   it('ISBLANK', () => {
+    expect(information.ISBLANK(utils.blank)).to.equal(true)
     expect(information.ISBLANK(null)).to.equal(true)
     expect(information.ISBLANK(1)).to.equal(false)
   })
@@ -52,6 +54,7 @@ describe('Information', () => {
   })
 
   it('ISNA', () => {
+    expect(information.ISNA(utils.blank)).to.equal(false)
     expect(information.ISNA(error.na)).to.equal(true)
     expect(information.ISNA(1)).to.equal(false)
   })
@@ -96,6 +99,7 @@ describe('Information', () => {
   })
 
   it('TYPE', () => {
+    expect(information.TYPE(utils.blank)).to.equal(1)
     expect(information.TYPE(1)).to.equal(1)
     expect(information.TYPE('a')).to.equal(2)
     expect(information.TYPE(true)).to.equal(4)

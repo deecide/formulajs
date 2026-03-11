@@ -2,6 +2,7 @@ import { expect } from 'chai'
 
 import * as dateTime from '../src/date-time.js'
 import * as error from '../src/utils/error.js'
+import * as utils from '../src/utils/common.js'
 import { useDate, useSerial } from '../src/utils/date.js'
 
 describe('Date & Time', () => {
@@ -11,6 +12,7 @@ describe('Date & Time', () => {
 
   describe('DATE', () => {
     it('should thrown an error in case of malformed input', () => {
+      expect(dateTime.DATE(utils.blank, utils.blank, utils.blank)).to.equal(error.num)
       expect(dateTime.DATE(10, 1, 1).getFullYear()).to.equal(1910)
       expect(dateTime.DATE(-1, 1, 1)).to.equal(error.num)
       expect(dateTime.DATE('invalid')).to.equal(error.value)
@@ -48,6 +50,14 @@ describe('Date & Time', () => {
   })
 
   it('DATEDIF', () => {
+    expect(dateTime.DATEDIF(utils.blank, '3/1/2003', 'Y')).to.equal(103)
+    expect(dateTime.DATEDIF(undefined, '3/1/2003', 'Y')).to.equal(103)
+    expect(dateTime.DATEDIF('1/1/2001', utils.blank, 'Y')).to.equal(error.num)
+    expect(dateTime.DATEDIF('1/1/2001', undefined, 'Y')).to.equal(error.num)
+    expect(dateTime.DATEDIF(utils.blank, utils.blank, 'Y')).to.equal(0)
+    expect(dateTime.DATEDIF(undefined, undefined, 'Y')).to.equal(0)
+    expect(dateTime.DATEDIF('1/1/2001', '1/1/2003', utils.blank)).to.equal(error.num)
+    expect(dateTime.DATEDIF('1/1/2001', '1/1/2003', undefined)).to.equal(error.num)
     expect(dateTime.DATEDIF('pouet', '1/1/2003', 'Y')).to.equal(error.value)
     expect(dateTime.DATEDIF('1/1/2003', 'pouet', 'Y')).to.equal(error.value)
     expect(dateTime.DATEDIF('1/1/2001', '1/1/2003', 'Y')).to.equal(2)
@@ -83,9 +93,17 @@ describe('Date & Time', () => {
       useSerial()
       expect(dateTime.DATEVALUE('02/29/2008')).to.equal(39507)
     })
+
+    it('should return an error', () => {
+      useSerial()
+      expect(dateTime.DATEVALUE(utils.blank)).to.equal(error.value)
+      expect(dateTime.DATEVALUE(undefined)).to.equal(error.value)
+    })
   })
 
   it('DAY', () => {
+    expect(dateTime.DAY(utils.blank)).to.equal(0)
+    expect(dateTime.DAY(undefined)).to.equal(0)
     expect(dateTime.DAY(1)).to.equal(1)
     expect(dateTime.DAY(2958465)).to.equal(31)
     expect(dateTime.DAY('1')).to.equal(1)
@@ -96,7 +114,10 @@ describe('Date & Time', () => {
   })
 
   it('DAYS', () => {
-    // expect(dateTime.DAYS(error.na, 1)).to.equal(error.na)
+    expect(dateTime.DAYS(utils.blank, 1)).to.equal(-1)
+    expect(dateTime.DAYS(1, utils.blank)).to.equal(1)
+    expect(dateTime.DAYS(utils.blank, utils.blank)).to.equal(0)
+    expect(dateTime.DAYS(error.na, 1)).to.equal(error.na)
     expect(dateTime.DAYS(true, 0)).to.equal(1)
     expect(dateTime.DAYS(false, 0)).to.equal(0)
     expect(dateTime.DAYS(2, 1)).to.equal(1)
@@ -132,6 +153,10 @@ describe('Date & Time', () => {
 
   describe('EDATE', () => {
     it('should compute EDATE', () => {
+      expect(dateTime.EDATE(undefined, 1)).to.equal(error.value)
+      expect(dateTime.EDATE(utils.blank, 1)).to.deep.equal(new Date(1900, 0, 31))
+      expect(dateTime.EDATE(new Date(2011, 0, 23), undefined)).to.deep.equal(new Date(2011, 0, 23))
+      expect(dateTime.EDATE(new Date(2011, 0, 23), utils.blank)).to.deep.equal(new Date(2011, 0, 23))
       expect(dateTime.EDATE('a', 0)).to.equal(error.value)
       expect(dateTime.EDATE('1/1/1900', 'a')).to.equal(error.value)
       expect(dateTime.EDATE(new Date(2011, 0, 23), 1)).to.deep.equal(new Date(2011, 1, 23))
@@ -194,6 +219,8 @@ describe('Date & Time', () => {
   })
 
   it('MONTH', () => {
+    expect(dateTime.MONTH(utils.blank)).to.equal(1)
+    expect(dateTime.MONTH(undefined)).to.equal(1)
     expect(dateTime.MONTH('1/1/1900')).to.equal(1)
     expect(dateTime.MONTH('12/1/1900')).to.equal(12)
     expect(dateTime.MONTH('a')).to.equal(error.value)
@@ -306,6 +333,8 @@ describe('Date & Time', () => {
   })
 
   it('YEAR', () => {
+    expect(dateTime.YEAR(utils.blank)).to.equal(1900)
+    expect(dateTime.YEAR(undefined)).to.equal(1900)
     expect(dateTime.YEAR('1/1/1900')).to.equal(1900)
     expect(dateTime.YEAR('a')).to.equal(error.value)
   })

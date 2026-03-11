@@ -124,6 +124,14 @@ export function INDEX(array, row_num, column_num) {
     return error.value
   }
 
+  if (row_num instanceof global.BlankValue) {
+    row_num = 0
+  }
+
+  if (column_num instanceof global.BlankValue) {
+    column_num = 0
+  }
+
   if (
     typeof row_num === 'string' ||
     (column_num !== null && column_num !== undefined && typeof column_num === 'string')
@@ -208,7 +216,12 @@ export function MATCH(lookup_value, lookup_array, match_type) {
     return error.ref
   }
 
-  if ((typeof lookup_value !== 'boolean' && !lookup_value && lookup_value !== 0) || !lookup_array) {
+  if (
+    (typeof lookup_value !== 'boolean' &&
+      (!lookup_value || lookup_value instanceof global.BlankValue) &&
+      lookup_value !== 0) ||
+    !lookup_array
+  ) {
     return error.na
   }
 
@@ -237,7 +250,7 @@ export function MATCH(lookup_value, lookup_array, match_type) {
 
       if (midValue === lookup_value) {
         return mid + 1
-      } else if (midValue === null || midValue < lookup_value) {
+      } else if (midValue === null || midValue instanceof global.BlankValue || midValue < lookup_value) {
         result = mid
         left = mid + 1
       } else {

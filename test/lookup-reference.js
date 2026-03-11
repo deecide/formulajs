@@ -2,6 +2,7 @@ import { expect } from 'chai'
 
 import * as error from '../src/utils/error.js'
 import * as lookup from '../src/lookup-reference.js'
+import * as utils from '../src/utils/common.js'
 
 describe('Lookup Reference', () => {
   it('CHOOSE', () => {
@@ -76,10 +77,17 @@ describe('Lookup Reference', () => {
       expect(lookup.MATCH()).to.equal(error.na)
       expect(lookup.MATCH(1)).to.equal(error.na)
       expect(lookup.MATCH(null, 1)).to.equal(error.na)
+      expect(lookup.MATCH(utils.blank, 1)).to.equal(error.na)
     })
 
     it('should return the following values', () => {
+      expect(lookup.MATCH(null, [null, null, 1], 1)).to.equal(error.na)
+      expect(lookup.MATCH(null, [1, 2, 3], 1)).to.equal(error.na)
+      expect(lookup.MATCH(utils.blank, [utils.blank, utils.blank, 1], 1)).to.equal(error.na)
+      expect(lookup.MATCH(utils.blank, ['pouet', 'lalala', utils.blank], 0)).to.equal(error.na)
       expect(lookup.MATCH(true, ['pouet', true], 0)).to.equal(2)
+      expect(lookup.MATCH(true, ['pouet', true], undefined)).to.equal(error.na)
+      expect(lookup.MATCH(true, ['pouet', true], utils.blank)).to.equal(error.na)
       expect(lookup.MATCH(true, ['test', true], 1)).to.equal(error.na)
       expect(lookup.MATCH(0, [7, 1, 0, 3, 4, 100, 7], 0)).to.equal(3)
       expect(lookup.MATCH(1, [0, 1, 2, 3, 4, 100, 7])).to.equal(2)
@@ -1257,10 +1265,36 @@ describe('Lookup Reference', () => {
   })
 
   it('VLOOKUP', () => {
+    expect(lookup.VLOOKUP(utils.blank, [[1, 2]], 2)).to.equal(error.na)
+    expect(lookup.VLOOKUP(utils.blank, [[utils.blank, 2]], 2)).to.equal(2)
     expect(lookup.VLOOKUP(1, [[1, 2]])).to.equal(error.value)
     expect(lookup.VLOOKUP(1, [[1, 2]], 2)).to.equal(2)
     expect(lookup.VLOOKUP(1, [[1, 2]], 2, false)).to.equal(2)
     expect(lookup.VLOOKUP(1, [[1, 2]], 2, true)).to.equal(2)
+    expect(
+      lookup.VLOOKUP(
+        utils.blank,
+        [
+          [1, '1'],
+          [2, '2'],
+          [utils.blank, '3'],
+          [4, '4']
+        ],
+        2,
+        false
+      )
+    ).to.equal('3')
+    expect(
+      lookup.VLOOKUP(
+        utils.blank,
+        [
+          [utils.blank, '1'],
+          [2, '2']
+        ],
+        2,
+        true
+      )
+    ).to.equal('1')
     expect(
       lookup.VLOOKUP(
         3,
@@ -1573,6 +1607,8 @@ describe('Lookup Reference', () => {
   })
 
   it('HLOOKUP', () => {
+    expect(lookup.HLOOKUP(utils.blank, [[1], [2]], 2)).to.equal(error.na)
+    expect(lookup.HLOOKUP(utils.blank, [[utils.blank], [2]], 2)).to.equal(2)
     expect(lookup.HLOOKUP(1, [[1, 2]])).to.equal(error.value)
     expect(lookup.HLOOKUP(1, [[1], [2]], 2)).to.equal(2)
     expect(lookup.HLOOKUP(1, [[1], [2]], 3)).to.equal(error.ref)

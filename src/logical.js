@@ -10,7 +10,7 @@ import * as utils from './utils/common.js'
  * @returns
  */
 export function AND() {
-  const args = utils.flatten(arguments)
+  const args = utils.replaceBlankValuesWithZero(utils.flatten(arguments))
   let result = error.value
 
   for (let i = 0; i < args.length; i++) {
@@ -61,6 +61,10 @@ export function IF(logical_test, value_if_true, value_if_false) {
     return logical_test
   }
 
+  if (logical_test instanceof global.BlankValue) {
+    return value_if_false
+  }
+
   if (typeof logical_test === 'string') {
     return error.value
   }
@@ -95,6 +99,10 @@ export function IFS() {
 
     if (typeof arguments[i * 2] === 'string') {
       return error.value
+    }
+
+    if (arguments[i * 2] instanceof global.BlankValue) {
+      continue
     }
 
     if (arguments[i * 2]) {
@@ -149,6 +157,10 @@ export function NOT(logical) {
     return logical
   }
 
+  if (logical instanceof global.BlankValue) {
+    return true
+  }
+
   return !logical
 }
 
@@ -160,7 +172,7 @@ export function NOT(logical) {
  * @returns
  */
 export function OR() {
-  const args = utils.flatten(arguments)
+  const args = utils.replaceBlankValuesWithZero(utils.flatten(arguments))
   let result = error.value
 
   for (let i = 0; i < args.length; i++) {

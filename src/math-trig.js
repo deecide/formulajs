@@ -4,6 +4,7 @@ import * as information from './information.js'
 import * as statistical from './statistical.js'
 import * as utils from './utils/common.js'
 import Decimal from 'decimal.js'
+import { parseDecimal } from './utils/common.js'
 
 /**
  * Returns the absolute value of a number.
@@ -1773,11 +1774,19 @@ export function SUMIF(range, criteria, sum_range) {
 
   sum_range = sum_range ? utils.flatten(sum_range) : range
 
+  range = utils.replaceBlankValuesWithUndefined(range)
+  sum_range = utils.replaceBlankValuesWithZero(sum_range)
+
   if (range instanceof Error) {
     return range
   }
 
   let result = new Decimal(0)
+
+  if (criteria instanceof global.BlankValue) {
+    criteria = undefined
+  }
+
   const isWildcard = criteria === '*'
   const tokenizedCriteria = isWildcard ? null : evalExpression.parse(criteria + '')
 
@@ -1795,7 +1804,7 @@ export function SUMIF(range, criteria, sum_range) {
           return sumValue
         } else {
           if (sumValue !== null) {
-            result = Decimal.add(result, sumValue)
+            result = Decimal.add(result, parseDecimal(sumValue))
           }
         }
       }

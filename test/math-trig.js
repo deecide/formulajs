@@ -2,11 +2,13 @@ import { expect } from 'chai'
 
 import * as error from '../src/utils/error.js'
 import * as mathTrig from '../src/math-trig.js'
+import * as utils from '../src/utils/common.js'
 import Decimal from 'decimal.js'
 
 describe('Math & Trig', () => {
-  it.skip('ABS', () => {
+  it('ABS', () => {
     expect(mathTrig.ABS()).to.equal(0)
+    expect(mathTrig.ABS(utils.blank)).to.equal(0)
     expect(mathTrig.ABS(undefined)).to.equal(0)
     expect(mathTrig.ABS(error.na)).to.equal(error.na)
     expect(mathTrig.ABS(-1)).to.equal(1)
@@ -131,6 +133,7 @@ describe('Math & Trig', () => {
   it('CEILING', () => {
     expect(mathTrig.CEILING()).to.equal(0)
     expect(mathTrig.CEILING(undefined)).to.equal(0)
+    expect(mathTrig.CEILING(utils.blank)).to.equal(0)
     expect(mathTrig.CEILING(error.na)).to.equal(error.na)
     expect(mathTrig.CEILING(1, error.na)).to.equal(error.na)
     expect(mathTrig.CEILING(error.na, error.na)).to.equal(error.na)
@@ -388,6 +391,7 @@ describe('Math & Trig', () => {
   })
 
   it('INT', () => {
+    expect(mathTrig.INT(utils.blank)).to.equal(0)
     expect(mathTrig.INT(undefined)).to.equal(0)
     expect(mathTrig.INT(error.na)).to.equal(error.na)
     expect(mathTrig.INT(5.5)).to.equal(5)
@@ -560,6 +564,8 @@ describe('Math & Trig', () => {
   })
 
   it('MOD', () => {
+    expect(mathTrig.MOD(0.5, utils.blank)).to.equal(error.div0)
+    expect(mathTrig.MOD(utils.blank, 2)).to.equal(0)
     expect(mathTrig.MOD(0.5, 0.2)).to.equal(0.1)
     expect(mathTrig.MOD(undefined, undefined)).to.equal(error.div0)
     expect(mathTrig.MOD(1, undefined)).to.equal(error.div0)
@@ -672,9 +678,11 @@ describe('Math & Trig', () => {
   })
 
   it('PRODUCT', () => {
+    expect(mathTrig.PRODUCT(undefined, 1)).to.equal(1)
+    expect(mathTrig.PRODUCT(utils.blank, 1)).to.equal(0)
+    expect(mathTrig.PRODUCT(utils.blank, utils.blank)).to.equal(0)
     expect(mathTrig.PRODUCT([0.1, 0.2])).to.equal(0.02)
     expect(mathTrig.PRODUCT(undefined)).to.equal(0)
-    expect(mathTrig.PRODUCT(undefined, 1)).to.equal(1)
     expect(mathTrig.PRODUCT(1, 2, error.na)).to.equal(error.na)
     expect(mathTrig.PRODUCT([1], [2], [error.na])).to.equal(error.na)
     expect(mathTrig.PRODUCT([5, 15, 30])).to.equal(2250)
@@ -727,9 +735,12 @@ describe('Math & Trig', () => {
   })
 
   it('ROUND', () => {
+    expect(mathTrig.ROUND(utils.blank, utils.blank)).to.equal(0)
     expect(mathTrig.ROUND(undefined, undefined)).to.equal(0)
     expect(mathTrig.ROUND(2, undefined)).to.equal(2)
+    expect(mathTrig.ROUND(2, utils.blank)).to.equal(2)
     expect(mathTrig.ROUND(undefined, 2)).to.equal(0)
+    expect(mathTrig.ROUND(utils.blank, 2)).to.equal(0)
     expect(mathTrig.ROUND(error.na)).to.equal(error.na)
     expect(mathTrig.ROUND(2.15, 1)).to.equals(2.2)
     expect(mathTrig.ROUND(2.149, 1)).to.equals(2.1)
@@ -749,8 +760,11 @@ describe('Math & Trig', () => {
 
   it('ROUNDDOWN', () => {
     expect(mathTrig.ROUNDDOWN(undefined, undefined)).to.equal(0)
+    expect(mathTrig.ROUNDDOWN(utils.blank, utils.blank)).to.equal(0)
     expect(mathTrig.ROUNDDOWN(2, undefined)).to.equal(2)
+    expect(mathTrig.ROUNDDOWN(2, utils.blank)).to.equal(2)
     expect(mathTrig.ROUNDDOWN(undefined, 2)).to.equal(0)
+    expect(mathTrig.ROUNDDOWN(utils.blank, 2)).to.equal(0)
     expect(mathTrig.ROUNDDOWN(error.na)).to.equal(error.na)
     expect(mathTrig.ROUNDDOWN(3.2, 0)).to.equal(3)
     expect(mathTrig.ROUNDDOWN(76.9, 0)).to.equal(76)
@@ -866,6 +880,8 @@ describe('Math & Trig', () => {
   })
 
   it('SUM', () => {
+    expect(mathTrig.SUM(utils.blank, utils.blank)).to.equal(0)
+    expect(mathTrig.SUM(utils.blank, 1)).to.equal(1)
     expect(mathTrig.SUM('invalid', 1)).to.equal(error.value)
     expect(mathTrig.SUM(undefined, 1)).to.equal(1)
     expect(mathTrig.SUM(1, 2, error.na)).to.equal(error.na)
@@ -932,9 +948,14 @@ describe('Math & Trig', () => {
   })
 
   it('SUMIF', () => {
+    expect(mathTrig.SUMIF([1, 2, null, 0], null, [1, 2, 3, 4])).to.equal(3)
+    expect(mathTrig.SUMIF([1, 2, 3, 5, utils.blank, utils.blank, 0], utils.blank, [1, 1, 1, 1, 2, 3, 7])).to.equal(5)
+    expect(mathTrig.SUMIF([4, 5, utils.blank], '>2')).to.equal(9)
+    expect(mathTrig.SUMIF([1, 2, 2, 1], '>0', [1, 2, 3, utils.blank])).to.equal(6)
+    expect(mathTrig.SUMIF([1, 2, 3], utils.blank)).to.equal(0)
+    expect(mathTrig.SUMIF([1, 2, 3], undefined)).to.equal(0)
     expect(mathTrig.SUMIF([0.1, 0.2], '>0')).to.equal(0.3)
     expect(mathTrig.SUMIF([undefined], undefined)).to.equal(0)
-    expect(mathTrig.SUMIF([1, 2, 3], undefined)).to.equal(0)
     expect(mathTrig.SUMIF([1, 2, 3], error.na)).to.equal(0)
     expect(mathTrig.SUMIF([undefined], '>2')).to.equal(0)
     expect(mathTrig.SUMIF([1, 2, error.na], error.na)).to.equal(error.na)
@@ -944,7 +965,7 @@ describe('Math & Trig', () => {
     expect(mathTrig.SUMIF([1, 2, 3], '>2')).to.equal(3)
     expect(mathTrig.SUMIF([1, 2, null], null)).to.equal(0)
     expect(mathTrig.SUMIF([1, 2, undefined], undefined)).to.equal(0)
-    expect(mathTrig.SUMIF([1, 2, null, 0], null, [1, 2, 3, 4])).to.equal(3)
+    expect(mathTrig.SUMIF([1, 2, null, 0], 0, [1, 2, 3, 4])).to.equal(4)
     expect(mathTrig.SUMIF([1, 2, null, 0], 0, [1, 2, 3, 4])).to.equal(4)
     expect(
       mathTrig.SUMIF(
@@ -975,6 +996,10 @@ describe('Math & Trig', () => {
   })
 
   it('SUMIFS', () => {
+    expect(mathTrig.SUMIFS([1, 2, utils.blank, 0], ['a', 'a', 'a', 'a'], 'a')).to.equal(3)
+    expect(mathTrig.SUMIFS([1, 2, utils.blank, 0], [utils.blank, utils.blank, utils.blank, 'a'], utils.blank)).to.equal(
+      3
+    )
     expect(mathTrig.SUMIFS([0.1, 0.2, 0, 0], ['a', 'a', 'a', 'a'], 'a')).to.equal(0.3)
     expect(mathTrig.SUMIFS([2, 0, 0, 0], ['a', 'a', 'a', 'a'], 'a')).to.equal(2)
     expect(mathTrig.SUMIFS([2, 4, 8, 16], ['a', 'a', 'a', 'a'], 'a')).to.equal(30)
@@ -985,9 +1010,11 @@ describe('Math & Trig', () => {
     expect(mathTrig.SUMIFS([1, 2, 3], [4, 5, 6], '>4', [7, 8, 9], '*')).to.equal(5)
     expect(mathTrig.SUMIFS([1, 'invalid', 3], [4, 5, 6], '>4')).to.equal(error.value)
     expect(mathTrig.SUMIFS([1, error.na, 3], [4, 5, 6], '>4')).to.equal(error.na)
+    expect(mathTrig.SUMIFS([1, 2, 3], [4, 5, 6], '>4', [10, 11, 12], '>11')).to.equal(3)
   })
 
   it('SUMPRODUCT', () => {
+    expect(mathTrig.SUMPRODUCT([utils.blank, 1], [2, 3])).to.equals(3)
     expect(mathTrig.SUMPRODUCT([0.1, 0.2], [0.3, 0.4])).to.equals(0.11)
     expect(
       mathTrig.SUMPRODUCT(
@@ -1002,6 +1029,7 @@ describe('Math & Trig', () => {
       )
     ).to.equal(error.na)
     expect(mathTrig.SUMPRODUCT([[undefined, undefined]], [[undefined, undefined]])).to.equal(0)
+    expect(mathTrig.SUMPRODUCT([[utils.blank, utils.blank]], [[utils.blank, utils.blank]])).to.equal(0)
     expect(
       mathTrig.SUMPRODUCT(
         [

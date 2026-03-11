@@ -659,7 +659,7 @@ export function COUNTBLANK() {
   for (let i = 0; i < range.length; i++) {
     element = range[i]
 
-    if (element === undefined || element === null || element === '') {
+    if (element === undefined || element === null || element instanceof global.BlankValue) {
       blanks++
     }
   }
@@ -675,9 +675,13 @@ export function COUNTBLANK() {
  * @returns
  */
 export function COUNTIF(range, criteria) {
-  range = utils.flatten(range)
+  range = utils.replaceBlankValuesWithUndefined(utils.flatten(range))
 
-  const isWildcard = criteria === void 0 || criteria === '*'
+  if (criteria instanceof global.BlankValue) {
+    criteria = undefined
+  }
+
+  const isWildcard = criteria === '*'
 
   if (isWildcard) {
     return range.length
@@ -716,9 +720,14 @@ export function COUNTIFS() {
   }
 
   for (let i = 0; i < args.length; i += 2) {
-    const range = utils.flatten(args[i])
-    const criteria = args[i + 1]
-    const isWildcard = criteria === void 0 || criteria === '*'
+    const range = utils.replaceBlankValuesWithUndefined(utils.flatten(args[i]))
+    let criteria = args[i + 1]
+
+    if (criteria instanceof global.BlankValue) {
+      criteria = undefined
+    }
+
+    const isWildcard = criteria === '*'
 
     if (!isWildcard) {
       const tokenizedCriteria = evalExpression.parse(criteria + '')
@@ -1662,7 +1671,7 @@ LOGNORM.INV = (probability, mean, standard_dev) => {
  * @returns
  */
 export function MAX() {
-  const flatArguments = utils.flatten(arguments)
+  const flatArguments = utils.flatten(arguments).filter((argument) => !(argument instanceof global.BlankValue))
   const someError = utils.anyError.apply(undefined, flatArguments)
 
   if (someError) {
@@ -1768,7 +1777,7 @@ export function MEDIAN() {
  * @returns
  */
 export function MIN() {
-  const flatArguments = utils.flatten(arguments)
+  const flatArguments = utils.flatten(arguments).filter((argument) => !(argument instanceof global.BlankValue))
   const someError = utils.anyError.apply(undefined, flatArguments)
 
   if (someError) {

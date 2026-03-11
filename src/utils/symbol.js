@@ -87,6 +87,14 @@ export function EQ(value1, value2) {
     value2 = undefined
   }
 
+  if (value1 instanceof global.BlankValue) {
+    value1 = undefined
+  }
+
+  if (value2 instanceof global.BlankValue) {
+    value2 = undefined
+  }
+
   if (typeof value1 === 'string') {
     value1 = value1.toLowerCase()
   }
@@ -277,8 +285,8 @@ export function MINUS(num1, num2) {
     return error.na
   }
 
-  num1 = utils.parseNumber(num1)
-  num2 = utils.parseNumber(num2)
+  num1 = utils.parseDecimal(num1)
+  num2 = utils.parseDecimal(num2)
   const anyError = utils.anyError(num1, num2)
 
   if (anyError) {
@@ -336,6 +344,14 @@ export function NE(value1, value2) {
   }
 
   if (value2 === null) {
+    value2 = undefined
+  }
+
+  if (value1 instanceof global.BlankValue) {
+    value1 = undefined
+  }
+
+  if (value2 instanceof global.BlankValue) {
     value2 = undefined
   }
 

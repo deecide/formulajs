@@ -3,6 +3,16 @@ import * as evalExpression from './criteria-eval.js'
 import { serialToDate } from './date.js'
 import Decimal from 'decimal.js'
 
+class BlankValue {
+  constructor() {
+    this.type = 'blank'
+  }
+}
+
+global.BlankValue = BlankValue
+
+export const blank = new BlankValue()
+
 // Arrays
 export function argsToArray(args) {
   const result = []
@@ -191,6 +201,18 @@ export function findField(database, title) {
   return index
 }
 
+export function removeBlankValues(args) {
+  return args.filter((arg) => !(arg instanceof BlankValue))
+}
+
+export function replaceBlankValuesWithUndefined(args) {
+  return args.map((arg) => (arg instanceof BlankValue ? undefined : arg))
+}
+
+export function replaceBlankValuesWithZero(args) {
+  return args.map((arg) => (arg instanceof BlankValue ? 0 : arg))
+}
+
 // Errors
 export function anyError() {
   for (let n = 0; n < arguments.length; n++) {
@@ -327,7 +349,7 @@ export function parseNumber(string) {
     return string
   }
 
-  if (string === undefined || string === null) {
+  if (string === undefined || string === null || string instanceof BlankValue) {
     return 0
   }
 
@@ -347,7 +369,7 @@ export function parseDecimal(string) {
     return string
   }
 
-  if (string === undefined || string === null) {
+  if (string === undefined || string === null || string instanceof BlankValue) {
     return new Decimal(0)
   }
 
@@ -445,7 +467,7 @@ export function parseString(string) {
     return string
   }
 
-  if (string === undefined || string === null) {
+  if (string === undefined || string === null || string instanceof BlankValue) {
     return ''
   }
 
@@ -526,4 +548,8 @@ export function isDefined(arg) {
 
 export function isDecimal(value) {
   return value instanceof Decimal
+}
+
+export function isBlankValue(value) {
+  return value instanceof BlankValue
 }

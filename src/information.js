@@ -34,7 +34,7 @@ ERROR.TYPE = (error_val) => {
  * @returns
  */
 export function ISBLANK(value) {
-  return value === null
+  return value === null || value instanceof global.BlankValue
 }
 
 /**
@@ -218,5 +218,9 @@ export function TYPE(value) {
 
   if (Array.isArray(value)) {
     return 64
+  }
+
+  if (value instanceof global.BlankValue) {
+    return 1
   }
 }

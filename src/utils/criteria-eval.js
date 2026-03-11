@@ -157,6 +157,9 @@ function computeExpression(tokens) {
         if (token.value === 'null') {
           token.value = null
         }
+        if (token.value === 'undefined') {
+          token.value = undefined
+        }
         values.push(token.value)
         break
     }

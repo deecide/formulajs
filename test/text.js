@@ -2,6 +2,7 @@ import { expect } from 'chai'
 
 import * as error from '../src/utils/error.js'
 import * as text from '../src/text.js'
+import * as utils from '../src/utils/common.js'
 
 describe('Text', () => {
   it('CHAR', () => {
@@ -9,6 +10,7 @@ describe('Text', () => {
     expect(text.CHAR(255)).to.equal('ÿ')
     expect(text.CHAR(1000)).to.equal(error.value)
     expect(text.CHAR(undefined)).to.equal(error.value)
+    expect(text.CHAR(utils.blank)).to.equal(error.value)
     expect(text.CHAR(error.na)).to.equal(error.na)
     expect(text.CHAR('invalid')).to.equal(error.value)
   })
@@ -28,6 +30,7 @@ describe('Text', () => {
   })
 
   it('CONCATENATE', () => {
+    expect(text.CONCATENATE('a', utils.blank, 'b')).to.equal('ab')
     expect(text.CONCATENATE('a', undefined, 'b')).to.equal('ab')
     expect(text.CONCATENATE('a', error.na, 'b')).to.equal(error.na)
     expect(text.CONCATENATE('hello', ' ', 'world')).to.equal('hello world')
@@ -73,7 +76,11 @@ describe('Text', () => {
   })
 
   it('FIND', () => {
+    expect(text.FIND('c', 'coucou', utils.blank)).to.equal(error.value)
     const data = 'Miriam McGovern'
+    expect(text.FIND('coucou', utils.blank)).to.equal(error.value)
+    expect(text.FIND(utils.blank, 'coucou')).to.equal(1)
+    expect(text.FIND(utils.blank, utils.blank)).to.equal(1)
     expect(text.FIND(undefined, undefined)).to.equal(1)
     expect(text.FIND('M', data)).to.equal(1)
     expect(text.FIND('m', data)).to.equal(6)
@@ -86,7 +93,13 @@ describe('Text', () => {
     expect(text.FIND(12, 312)).to.equal(2)
   })
 
-  it.skip('FIXED', () => {
+  it('FIXED', () => {
+    expect(text.FIXED(1234.567, 1, utils.blank)).to.equal('1,234.6')
+    expect(text.FIXED(1234.567, undefined)).to.equal('1,234.57')
+    expect(text.FIXED(1234.567, utils.blank)).to.equal('1,235')
+    expect(text.FIXED(undefined, 1)).to.equal('0.0')
+    expect(text.FIXED(utils.blank, 1)).to.equal('0.0')
+    expect(text.FIXED(utils.blank, utils.blank)).to.equal('0')
     expect(text.FIXED(1234.567, 1)).to.equal('1,234.6')
     expect(text.FIXED(1234.567, -1)).to.equal('1,230')
     expect(text.FIXED(-1234.567, -1, true)).to.equal('-1230')
@@ -105,10 +118,13 @@ describe('Text', () => {
   })
 
   it('LEFT', () => {
+    expect(text.LEFT(utils.blank, utils.blank)).to.equal('')
     expect(text.LEFT(error.na, 2)).to.equal(error.na)
     expect(text.LEFT('text', error.na)).to.equal(error.na)
+    expect(text.LEFT('text', utils.blank)).to.equal('')
     expect(text.LEFT(undefined, undefined)).to.equal('')
     expect(text.LEFT(undefined, 3)).to.equal('')
+    expect(text.LEFT(utils.blank, 3)).to.equal('')
     expect(text.LEFT('Sale Price', 4)).to.equal('Sale')
     expect(text.LEFT('Sweeden')).to.equal('S')
     expect(text.LEFT(42)).to.equal('4')
@@ -117,6 +133,7 @@ describe('Text', () => {
 
   it('LEN', () => {
     expect(text.LEN(undefined)).to.equal(0)
+    expect(text.LEN(utils.blank)).to.equal(0)
     expect(text.LEN(error.na)).to.equal(error.na)
     expect(text.LEN(true)).to.equal(4)
     expect(text.LEN('four')).to.equal(4)
@@ -129,6 +146,7 @@ describe('Text', () => {
 
   it('LOWER', () => {
     expect(text.LOWER(undefined)).to.equal('')
+    expect(text.LOWER(utils.blank)).to.equal('')
     expect(text.LOWER(error.na)).to.equal(error.na)
     expect(text.LOWER('abcd')).to.equal('abcd')
     expect(text.LOWER('ABcd')).to.equal('abcd')
@@ -141,6 +159,10 @@ describe('Text', () => {
 
   it('MID', () => {
     const data = 'Fluid Flow'
+    expect(text.MID(undefined, 2, 1)).to.equal('')
+    expect(text.MID(utils.blank, 2, 1)).to.equal('')
+    expect(text.MID(data, utils.blank, 5)).to.equal(error.value)
+    expect(text.MID(data, 1, utils.blank)).to.equal('')
     expect(text.MID(1234, 2, 1)).to.equal('2')
     expect(text.MID(true, 2, 1)).to.equal('r')
     expect(text.MID(data, 1, 5)).to.equal('Fluid')
@@ -354,6 +376,7 @@ describe('Text', () => {
   })
 
   it('TRIM', () => {
+    expect(text.TRIM(utils.blank)).to.equal('')
     expect(text.TRIM(undefined)).to.equal('')
     expect(text.TRIM(error.na)).to.equal(error.na)
     expect(text.TRIM(' more  spaces ')).to.equal('more spaces')
@@ -384,6 +407,7 @@ describe('Text', () => {
   })
 
   it('UPPER', () => {
+    expect(text.UPPER(utils.blank)).to.equal('')
     expect(text.UPPER(undefined)).to.equal('')
     expect(text.UPPER(error.na)).to.equal(error.na)
     expect(text.UPPER('to upper case please')).to.equal('TO UPPER CASE PLEASE')
@@ -404,6 +428,8 @@ describe('Text', () => {
       expect(text.VALUE('')).to.equal(0)
       expect(text.VALUE()).to.equal(0)
       expect(text.VALUE(null)).to.equal(0)
+      expect(text.VALUE(undefined)).to.equal(0)
+      expect(text.VALUE(utils.blank)).to.equal(0)
     })
 
     it('should thrown an error in case of boolean input', () => {

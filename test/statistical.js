@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import * as error from '../src/utils/error.js'
 import * as mathTrig from '../src/math-trig.js'
 import * as statistical from '../src/statistical.js'
+import * as utils from '../src/utils/common.js'
 
 describe('Statistical', () => {
   it('AVEDEV', () => {
@@ -22,6 +23,9 @@ describe('Statistical', () => {
   })
 
   it('AVERAGE', () => {
+    expect(statistical.AVERAGE(null, null, 3)).to.equal(3)
+    expect(statistical.AVERAGE(utils.blank, 1)).to.equal(0.5)
+    expect(statistical.AVERAGE(0.1, 0.2)).to.equal(0.15)
     expect(statistical.AVERAGE(0.1, 0.2)).to.equal(0.15)
     expect(statistical.AVERAGE('pouet', 2)).to.equal(error.value)
     expect(statistical.AVERAGE(false, 1)).to.equal(0.5)
@@ -196,6 +200,8 @@ describe('Statistical', () => {
   })
 
   it('COUNT', () => {
+    expect(statistical.COUNT(utils.blank)).to.equal(0)
+    expect(statistical.COUNT(utils.blank, 1)).to.equal(1)
     expect(statistical.COUNT()).to.equal(0)
     expect(statistical.COUNT(undefined)).to.equal(0)
     expect(statistical.COUNT(error.na)).to.equal(0)
@@ -227,42 +233,47 @@ describe('Statistical', () => {
   })
 
   it('COUNTA', () => {
+    expect(statistical.COUNTA(utils.blank)).to.equal(0)
     expect(statistical.COUNTA()).to.equal(0)
     expect(statistical.COUNTA(undefined)).to.equal(0)
     expect(statistical.COUNTA(error.na)).to.equal(1)
     expect(statistical.COUNTA(1, 2, error.div0)).to.equal(3)
     expect(statistical.COUNTA(0.1, 0.2)).to.equal(2)
-    expect(statistical.COUNTA(1, null, 3, 'a', '', 'c')).to.equal(4)
-    expect(statistical.COUNTA([1, null, 3, 'a', '', 'c'])).to.equal(4)
-    expect(statistical.COUNTA([1, null, 3], ['a', '', 'c'])).to.equal(4)
+    expect(statistical.COUNTA(1, null, 3, 'a', '', 'c')).to.equal(5)
+    expect(statistical.COUNTA([1, null, 3, 'a', '', 'c'])).to.equal(5)
+    expect(statistical.COUNTA([1, null, 3], ['a', '', 'c'])).to.equal(5)
     expect(
       statistical.COUNTA([
         [1, null, 3],
         ['a', '', 'c']
       ])
-    ).to.equal(4)
+    ).to.equal(5)
   })
 
   it('COUNTBLANK', () => {
     expect(statistical.COUNTBLANK()).to.equal(0)
     expect(statistical.COUNTBLANK(undefined)).to.equal(1)
+    expect(statistical.COUNTBLANK(utils.blank)).to.equal(1)
     expect(statistical.COUNTBLANK(error.na)).to.equal(0)
     expect(statistical.COUNTBLANK(1, 2, error.div0)).to.equal(0)
     expect(statistical.COUNTBLANK(0.1, 0.2)).to.equal(0)
-    expect(statistical.COUNTBLANK(1, null, 3, 'a', '', 'c')).to.equal(2)
-    expect(statistical.COUNTBLANK([1, null, 3, 'a', '', 'c'])).to.equal(2)
-    expect(statistical.COUNTBLANK([1, null, 3], ['a', '', 'c'])).to.equal(2)
+    expect(statistical.COUNTBLANK(1, null, 3, 'a', '', 'c')).to.equal(1)
+    expect(statistical.COUNTBLANK([1, null, 3, 'a', '', 'c'])).to.equal(1)
+    expect(statistical.COUNTBLANK([1, null, 3], ['a', '', 'c'])).to.equal(1)
     expect(
       statistical.COUNTBLANK([
         [1, null, 3],
         ['a', '', 'c']
       ])
-    ).to.equal(2)
+    ).to.equal(1)
   })
 
   it('COUNTIF', () => {
+    expect(statistical.COUNTIF([utils.blank, 2], utils.blank)).to.equal(1)
     expect(statistical.COUNTIF([true, false], '=1')).to.equal(1)
     expect(statistical.COUNTIF([undefined], '>1')).to.equal(0)
+    expect(statistical.COUNTIF([undefined], undefined)).to.equal(1)
+    expect(statistical.COUNTIF([utils.blank], '>1')).to.equal(0)
     expect(statistical.COUNTIF([0.1, 0.2], '>0')).to.equal(2)
     expect(statistical.COUNTIF([error.na], '>1')).to.equal(0)
     expect(statistical.COUNTIF([1, null, 3, 'a', ''], '>1')).to.equal(1)
@@ -298,7 +309,9 @@ describe('Statistical', () => {
 
   it('COUNTIFS', () => {
     expect(statistical.COUNTIFS([0.1, 0.2], '>0')).to.equal(2)
+    expect(statistical.COUNTIF([utils.blank, 2], utils.blank)).to.equal(1)
     expect(statistical.COUNTIFS([undefined], '>1')).to.equal(0)
+    expect(statistical.COUNTIFS([utils.blank], '>1')).to.equal(0)
     expect(statistical.COUNTIFS([error.na], '>1')).to.equal(0)
     expect(statistical.COUNTIFS([1, null, 3, 'a', ''], '>1')).to.equal(1)
     expect(statistical.COUNTIFS([1, null, 'c', 'a', ''], '>1')).to.equal(0)
@@ -628,6 +641,9 @@ describe('Statistical', () => {
   })
 
   it('MAX', () => {
+    expect(statistical.MAX(utils.blank)).to.equal(0)
+    expect(statistical.MAX(utils.blank, 1)).to.equal(1)
+    expect(statistical.MAX(utils.blank, -1)).to.equal(-1)
     expect(statistical.MAX(true, 0)).to.equal(1)
     expect(statistical.MAX(0.1, 0.2)).to.equal(0.2)
     expect(statistical.MAX('coucou', 2)).to.equal(error.value)
@@ -663,6 +679,13 @@ describe('Statistical', () => {
   })
 
   it('MAXIFS', () => {
+    expect(statistical.MAXIFS([1, 2], [undefined, 4], '>2')).to.equal(2)
+    expect(statistical.MAXIFS([1, 2], [utils.blank, 4], '>2')).to.equal(2)
+    expect(statistical.MAXIFS([1, 2], [1, utils.blank], '>2')).to.equal(0)
+    expect(statistical.MAXIFS([1, 2], [utils.blank, utils.blank], '>0')).to.equal(0)
+    expect(statistical.MAXIFS([utils.blank, utils.blank], [1, 2], '>0')).to.equal(0)
+    expect(statistical.MAXIFS([utils.blank, utils.blank], [1, 2], '>0')).to.equal(0)
+    expect(statistical.MAXIFS([1, 2], [utils.blank, utils.blank], utils.blank)).to.equal(2)
     expect(statistical.MAXIFS([0.1, 0.2], [1, 4], '>2')).to.equal(0.2)
     expect(statistical.MAXIFS([2, 4, 8, error.na], [1, 4, 4, 1], '>2')).to.equal(8)
     expect(statistical.MAXIFS(['a', 'b', 'c', 'd'], [1, 4, 4, 2], '>2')).to.equal(error.value)
@@ -684,6 +707,9 @@ describe('Statistical', () => {
   })
 
   it('MIN', () => {
+    expect(statistical.MIN(utils.blank)).to.equal(0)
+    expect(statistical.MIN(utils.blank, 1)).to.equal(1)
+    expect(statistical.MIN(utils.blank, -1)).to.equal(-1)
     expect(statistical.MIN()).to.equal(0)
     expect(statistical.MIN(0.1, 0.2)).to.equal(0.1)
     expect(statistical.MIN('coucou', 2)).to.equal(error.value)

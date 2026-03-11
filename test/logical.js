@@ -2,9 +2,11 @@ import { expect } from 'chai'
 
 import * as error from '../src/utils/error.js'
 import * as logical from '../src/logical.js'
+import * as utils from '../src/utils/common.js'
 
 describe('Logical', () => {
   it('AND', () => {
+    expect(logical.AND(utils.blank, true)).to.equal(false)
     expect(logical.AND(undefined, undefined)).to.equal(error.value)
     expect(logical.AND('', undefined)).to.equal(error.value)
     expect(logical.AND('text', undefined)).to.equal(error.value)
@@ -25,6 +27,7 @@ describe('Logical', () => {
   })
 
   it('IF', () => {
+    expect(logical.IF(utils.blank, 1, 2)).to.equal(2)
     expect(logical.IF(undefined, undefined, undefined)).to.equal(0)
     expect(logical.IF(undefined, 1, 2)).to.equal(2)
     expect(logical.IF(error.na, undefined)).to.equal(error.na)
@@ -39,6 +42,7 @@ describe('Logical', () => {
   })
 
   it('IFS', () => {
+    expect(logical.IFS(utils.blank, 1, false, 2)).to.equal(error.na)
     expect(logical.IFS(true, 1)).to.equal(1)
     expect(logical.IFS(false, 1, true, 2)).to.equal(2)
     expect(logical.IFS(false, 1, false, 2)).to.equal(error.na)
@@ -46,16 +50,19 @@ describe('Logical', () => {
   })
 
   it('IFERROR', () => {
+    expect(logical.IFERROR(utils.blank, 2)).to.equal(utils.blank)
     expect(logical.IFERROR(1, 2)).to.equal(1)
     expect(logical.IFERROR(error.value, 2)).to.equal(2)
   })
 
   it('IFNA', () => {
+    expect(logical.IFNA(utils.blank, 2)).to.equal(utils.blank)
     expect(logical.IFNA(1, 2)).to.equal(1)
     expect(logical.IFNA(error.na, 2)).to.equal(2)
   })
 
   it('NOT', () => {
+    expect(logical.NOT(utils.blank)).to.equal(true)
     expect(logical.NOT(true)).to.equal(false)
     expect(logical.NOT(false)).to.equal(true)
     expect(logical.NOT('text')).to.equal(error.value)
@@ -63,6 +70,7 @@ describe('Logical', () => {
   })
 
   it('OR', () => {
+    expect(logical.OR(utils.blank, true)).to.equal(true)
     expect(logical.OR(undefined, undefined)).to.equal(error.value)
     expect(logical.OR('', undefined)).to.equal(error.value)
     expect(logical.OR('text', undefined)).to.equal(error.value)

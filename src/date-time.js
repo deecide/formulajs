@@ -155,21 +155,25 @@ export function DATEDIF(start_date, end_date, unit) {
   if (
     unit === null ||
     unit === undefined ||
+    unit instanceof global.BlankValue ||
     typeof unit !== 'string' ||
     !['Y', 'M', 'D', 'MD', 'YM', 'YD'].includes(unit.toUpperCase())
   ) {
     return error.num
   }
 
-  if ((start_date === null || start_date === undefined) && (end_date === null || end_date === undefined)) {
+  if (
+    (start_date === null || start_date === undefined || start_date instanceof global.BlankValue) &&
+    (end_date === null || end_date === undefined || end_date instanceof global.BlankValue)
+  ) {
     return 0
   }
 
-  if (start_date === null || start_date === undefined) {
+  if (start_date === null || start_date === undefined || start_date instanceof global.BlankValue) {
     start_date = new Date('1900-01-01')
   }
 
-  if (end_date === null || end_date === undefined) {
+  if (end_date === null || end_date === undefined || end_date instanceof global.BlankValue) {
     return error.num
   }
 
@@ -293,7 +297,7 @@ export function DATEVALUE(date_text) {
  * @returns
  */
 export function DAY(serial_number) {
-  if (serial_number === null || serial_number === undefined) {
+  if (serial_number === null || serial_number === undefined || serial_number instanceof global.BlankValue) {
     return 0
   } else if (serial_number instanceof Error) {
     return serial_number
@@ -339,11 +343,11 @@ export function DAYS(end_date, start_date) {
     return start_date
   }
 
-  if (typeof end_date === 'boolean') {
+  if (typeof end_date === 'boolean' || end_date instanceof global.BlankValue) {
     end_date = utils.parseNumber(end_date)
   }
 
-  if (typeof start_date === 'boolean') {
+  if (typeof start_date === 'boolean' || start_date instanceof global.BlankValue) {
     start_date = utils.parseNumber(start_date)
   }
 
@@ -433,6 +437,10 @@ export function EDATE(start_date, months) {
     return error.value
   }
 
+  if (start_date instanceof global.BlankValue) {
+    start_date = 0
+  }
+
   start_date = utils.parseDate(start_date)
 
   if (start_date instanceof Error) {
@@ -445,6 +453,10 @@ export function EDATE(start_date, months) {
 
   if (typeof months === 'boolean') {
     return error.value
+  }
+
+  if (months === null || months === undefined || months instanceof global.BlankValue) {
+    months = 0
   }
 
   if (isNaN(months)) {
@@ -575,7 +587,7 @@ export function MINUTE(serial_number) {
  * @returns
  */
 export function MONTH(serial_number) {
-  if (serial_number === null || serial_number === undefined) {
+  if (serial_number === null || serial_number === undefined || serial_number instanceof global.BlankValue) {
     return 1
   } else if (serial_number instanceof Error) {
     return serial_number
@@ -953,7 +965,7 @@ WORKDAY.INTL = (start_date, days, weekend, holidays) => {
  * @returns
  */
 export function YEAR(serial_number) {
-  if (serial_number === null || serial_number === undefined) {
+  if (serial_number === null || serial_number === undefined || serial_number instanceof global.BlankValue) {
     return 1900
   } else if (serial_number instanceof Error) {
     return serial_number
