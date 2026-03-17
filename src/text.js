@@ -579,30 +579,55 @@ export function SUBSTITUTE(text, old_text, new_text, instance_num) {
     return error.na
   }
 
-  if (!text || !old_text) {
+  const someError = utils.anyError(text, old_text, new_text, instance_num)
+
+  if (someError) {
+    return someError
+  }
+
+  if (new_text instanceof global.BlankValue) {
+    new_text = ''
+  }
+
+  if (!text || text instanceof global.BlankValue) {
+    return ''
+  } else if (!old_text || old_text instanceof global.BlankValue) {
     return text
-  } else if (instance_num === undefined) {
-    return text.split(old_text).join(new_text)
   } else {
-    instance_num = Math.floor(Number(instance_num))
+    text = utils.parseString(text)
+    old_text = utils.parseString(old_text)
+    new_text = utils.parseString(new_text)
 
-    if (Number.isNaN(instance_num) || instance_num <= 0) {
-      return error.value
-    }
-
-    let index = 0
-    let i = 0
-
-    while (index > -1 && text.indexOf(old_text, index) > -1) {
-      index = text.indexOf(old_text, index + 1)
-      i++
-
-      if (index > -1 && i === instance_num) {
-        return text.substring(0, index) + new_text + text.substring(index + old_text.length)
+    if (instance_num === undefined) {
+      return text.split(old_text).join(new_text)
+    } else {
+      if (typeof instance_num === 'boolean') {
+        return error.value
       }
-    }
 
-    return text
+      instance_num = Math.floor(Number(instance_num))
+
+      if (Number.isNaN(instance_num) || instance_num <= 0 || instance_num instanceof global.BlankValue) {
+        return error.value
+      }
+
+      let index = -1
+      let i = 0
+
+      while (true) {
+        index = text.indexOf(old_text, index + 1)
+
+        if (index === -1) break
+
+        i++
+
+        if (i === instance_num) {
+          return text.substring(0, index) + new_text + text.substring(index + old_text.length)
+        }
+      }
+
+      return text
+    }
   }
 }
 

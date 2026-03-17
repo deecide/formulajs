@@ -258,13 +258,23 @@ describe('Text', () => {
 
   describe('SUBSTITUTE', () => {
     it('should substitute all occurrences of a string for another string', () => {
+      expect(text.SUBSTITUTE('coucou', 'cou', 'bb', true)).to.equal(error.value)
+      expect(text.SUBSTITUTE(utils.blank, 'cou', 'bb', undefined)).to.equal('')
+      expect(text.SUBSTITUTE('coucou', 'cou', 'bb', 1)).to.equal('bbcou')
+      expect(text.SUBSTITUTE('coucou', 'cou', 'bb', 2)).to.equal('coubb')
+      expect(text.SUBSTITUTE('coucou', 'cou', 'bb', 3)).to.equal('coucou')
+      expect(text.SUBSTITUTE(12345, 2, 9)).to.equal('19345')
+      expect(text.SUBSTITUTE(true, true, 9)).to.equal('9')
+      expect(text.SUBSTITUTE(utils.blank, 'Jim', 'James')).to.equal('')
+      expect(text.SUBSTITUTE('Jim Alateras', utils.blank, 'James')).to.equal('Jim Alateras')
+      expect(text.SUBSTITUTE('Jim Alateras', 'Jim', utils.blank)).to.equal(' Alateras')
       expect(text.SUBSTITUTE('Jim Alateras', 'Jim', 'James')).to.equal('James Alateras')
       expect(text.SUBSTITUTE('Jim Alateras', 'im', 'ames')).to.equal('James Alateras')
       expect(text.SUBSTITUTE('Jim Alateras', '', 'ames')).to.equal('Jim Alateras')
       expect(text.SUBSTITUTE('Jim Alateras', undefined, 'ames')).to.equal('Jim Alateras')
       expect(text.SUBSTITUTE('Jim, Alateras, Sr.', ',', '')).to.equal('Jim Alateras Sr.')
       expect(text.SUBSTITUTE('', 'im', 'ames')).to.equal('')
-      expect(text.SUBSTITUTE(undefined, 'im', 'ames')).to.not.exist
+      expect(text.SUBSTITUTE(undefined, 'im', 'ames')).to.equal('')
     })
 
     it('should substitute regex meta-characters without interpretation', () => {
@@ -294,6 +304,14 @@ describe('Text', () => {
       expect(text.SUBSTITUTE('a-a-a', '-', ':', -1)).to.equal(error.value)
       expect(text.SUBSTITUTE('a-a-a', '-', ':', 0)).to.equal(error.value)
       expect(text.SUBSTITUTE('a-a-a', '-', ':', 0.5)).to.equal(error.value)
+      expect(text.SUBSTITUTE('a-a-a', '-', ':', utils.blank)).to.equal(error.value)
+    })
+
+    it('should return an error', () => {
+      expect(text.SUBSTITUTE(error.na, '-', ':', '')).to.equal(error.na)
+      expect(text.SUBSTITUTE('a-a-a', error.na, ':', '')).to.equal(error.na)
+      expect(text.SUBSTITUTE('a-a-a', '-', error.na, '')).to.equal(error.na)
+      expect(text.SUBSTITUTE('a-a-a', '-', ':', error.na)).to.equal(error.na)
     })
   })
 
