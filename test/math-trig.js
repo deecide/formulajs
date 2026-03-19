@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as error from '../src/utils/error.js'
 import * as mathTrig from '../src/math-trig.js'
 import * as utils from '../src/utils/common.js'
-import Decimal from 'decimal.js'
+import Big from 'big.js'
 
 describe('Math & Trig', () => {
   it('ABS', () => {
@@ -671,7 +671,7 @@ describe('Math & Trig', () => {
     expect(mathTrig.POWER(5, error.na)).to.equal(error.na)
     expect(mathTrig.POWER(5, 2)).to.equal(25)
     expect(mathTrig.POWER(98.6, 3.2)).to.equal(2401077.222069576)
-    expect(mathTrig.POWER(4, Decimal(5).div(4).toNumber())).to.equals(5.656854249492381)
+    expect(mathTrig.POWER(4, Big(5).div(4).toNumber())).to.equals(5.656854249492381)
     expect(mathTrig.POWER(-1, 0.5)).to.equal(error.num)
     expect(mathTrig.POWER(-1, 'invalid')).to.equal(error.value)
     expect(mathTrig.POWER(true, false)).to.equal(1)

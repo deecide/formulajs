@@ -13,7 +13,7 @@ const banner = `/* ${pkg.name} v${pkg.version} */`
 
 const baseConfig = {
   input: 'src/index.js',
-  external: ['bessel', 'jstat', 'decimal.js'],
+  external: ['bessel', 'jstat', 'decimal.js', 'big.js'],
   plugins: [resolve(), commonjs()]
 }
 

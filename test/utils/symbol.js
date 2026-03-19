@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as error from '../../src/utils/error.js'
 import * as symbol from '../../src/utils/symbol.js'
 import * as utils from '../../src/utils/common.js'
-import Decimal from 'decimal.js'
+import Big from 'big.js'
 
 describe('Utils => Symbol', () => {
   it('ADD', () => {
@@ -57,7 +57,7 @@ describe('Utils => Symbol', () => {
     expect(symbol.EQ(0, -0)).to.equal(true)
     expect(symbol.EQ(0, 1e-324)).to.equal(true)
     expect(symbol.EQ(0, '1e-324')).to.equal(false)
-    expect(symbol.EQ(0.1, Decimal(0.3).minus(0.2).toNumber())).to.equal(true)
+    expect(symbol.EQ(0.1, Big(0.3).minus(0.2).toNumber())).to.equal(true)
     expect(symbol.EQ(10, 10)).to.equal(true)
     expect(symbol.EQ(1.2, 1.2)).to.equal(true)
     expect(symbol.EQ('hello', 'jim')).to.equal(false)
@@ -217,7 +217,7 @@ describe('Utils => Symbol', () => {
     expect(symbol.NE(0, -0)).to.equal(false)
     expect(symbol.NE(0, 1e-324)).to.equal(false)
     expect(symbol.NE(0, '1e-324')).to.equal(true)
-    expect(symbol.NE(0.1, Decimal(0.3).minus(0.2).toNumber())).to.equal(false)
+    expect(symbol.NE(0.1, Big(0.3).minus(0.2).toNumber())).to.equal(false)
     expect(symbol.NE(10, 10)).to.equal(false)
     expect(symbol.NE(1.2, 1.2)).to.equal(false)
     expect(symbol.NE('hello', 'jim')).to.equal(true)
@@ -253,7 +253,7 @@ describe('Utils => Symbol', () => {
     expect(symbol.POW(5)).to.equal(error.na)
     expect(symbol.POW(5, 2)).to.equal(25)
     expect(symbol.POW(98.6, 3.2)).to.equal(2401077.222069576)
-    expect(symbol.POW(4, Decimal(5).div(4).toNumber())).to.equals(5.656854249492381)
+    expect(symbol.POW(4, Big(5).div(4).toNumber())).to.equals(5.656854249492381)
     expect(symbol.POW(-1, 0.5)).to.equal(error.num)
     expect(symbol.POW(-1, 'invalid')).to.equal(error.value)
   })

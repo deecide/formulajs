@@ -3,6 +3,7 @@ import * as evalExpression from './utils/criteria-eval.js'
 import * as information from './information.js'
 import * as statistical from './statistical.js'
 import * as utils from './utils/common.js'
+import Big from 'big.js'
 import Decimal from 'decimal.js'
 import { parseDecimal } from './utils/common.js'
 
@@ -378,7 +379,7 @@ export function CEILING(number, significance) {
     return anyError
   }
 
-  if (significance.isZero()) {
+  if (utils.isZero(significance)) {
     return 0
   }
 
@@ -386,7 +387,9 @@ export function CEILING(number, significance) {
     return error.num
   }
 
-  return Decimal.mul(Decimal.div(number, significance).ceil(), significance).toNumber()
+  const divided = number.div(significance)
+  const floored = divided.lt(0) ? divided.round(0, Big.roundDown) : divided.round(0, Big.roundUp)
+  return floored.times(significance).toNumber()
 }
 
 /**
@@ -1070,14 +1073,14 @@ export function MOD(number, divisor) {
     return anyError
   }
 
-  if (divisor.isZero()) {
+  if (utils.isZero(divisor)) {
     return error.div0
   }
 
-  const result = Decimal.mod(number, divisor)
+  const result = number.mod(divisor)
 
   if ((result.gt(0) && divisor.lt(0)) || (result.lt(0) && divisor.gt(0))) {
-    return Decimal.add(result, divisor).toNumber()
+    return result.plus(divisor).toNumber()
   }
 
   return result.toNumber()
@@ -1216,11 +1219,11 @@ export function POWER(number, power) {
     return anyError
   }
 
-  if (number.isZero() && power.isZero()) {
+  if (utils.isZero(number) && utils.isZero(power)) {
     return error.num
   }
 
-  const result = Decimal.pow(number, power).toNumber()
+  const result = Decimal.pow(number.toNumber(), power.toNumber()).toNumber()
 
   if (isNaN(result)) {
     return error.num
@@ -1252,10 +1255,10 @@ export function PRODUCT() {
     return args
   }
 
-  let result = new Decimal(1)
+  let result = new Big(1)
 
   for (let i = 0; i < args.length; i++) {
-    result = Decimal.mul(result, args[i])
+    result = result.times(args[i])
   }
 
   return result.toNumber()
@@ -1720,7 +1723,7 @@ export function SUBTOTAL(function_num, ref1) {
  * @returns
  */
 export function SUM() {
-  let result = new Decimal(0)
+  let result = new Big(0)
 
   utils.arrayEach(utils.argsToArray(arguments), (value) => {
     if (result instanceof Error) {
@@ -1728,10 +1731,10 @@ export function SUM() {
     } else if (value instanceof Error) {
       result = value
     } else if (typeof value === 'number' || utils.isDecimal(value)) {
-      result = Decimal.add(result, value)
+      result = result.plus(value)
     } else if (typeof value === 'boolean') {
       if (value) {
-        result = Decimal.add(result, 1)
+        result = result.plus(1)
       }
     } else if (typeof value === 'string') {
       const parsed = parseFloat(value)
@@ -1739,7 +1742,7 @@ export function SUM() {
       if (isNaN(parsed)) {
         result = error.value
       } else {
-        result = Decimal.add(result, new Decimal(parsed))
+        result = result.plus(new Big(parsed))
       }
     } else if (Array.isArray(value)) {
       const inner_result = SUM.apply(null, value)
@@ -1747,7 +1750,7 @@ export function SUM() {
       if (inner_result instanceof Error) {
         result = inner_result
       } else {
-        result = Decimal.add(result, inner_result)
+        result = result.plus(inner_result)
       }
     }
   })
@@ -1781,7 +1784,7 @@ export function SUMIF(range, criteria, sum_range) {
     return range
   }
 
-  let result = new Decimal(0)
+  let result = new Big(0)
 
   if (criteria instanceof global.BlankValue) {
     criteria = undefined
@@ -1795,7 +1798,7 @@ export function SUMIF(range, criteria, sum_range) {
     const sumValue = sum_range[i]
 
     if (isWildcard) {
-      result = Decimal.add(result, value)
+      result = result.plus(value)
     } else {
       const tokens = [evalExpression.createToken(value, evalExpression.TOKEN_TYPE_LITERAL)].concat(tokenizedCriteria)
 
@@ -1804,7 +1807,7 @@ export function SUMIF(range, criteria, sum_range) {
           return sumValue
         } else {
           if (sumValue !== null) {
-            result = Decimal.add(result, parseDecimal(sumValue))
+            result = result.plus(parseDecimal(sumValue))
           }
         }
       }
@@ -1857,7 +1860,7 @@ export function SUMPRODUCT() {
   }
 
   const arrays = arguments.length + 1
-  let result = new Decimal(0)
+  let result = new Big(0)
   let product
   let k
   let _i
@@ -1865,7 +1868,7 @@ export function SUMPRODUCT() {
 
   for (let i = 0; i < arguments[0].length; i++) {
     if (!(arguments[0][i] instanceof Array)) {
-      product = 1
+      product = Big(1)
 
       for (k = 1; k < arrays; k++) {
         const _i_arg = arguments[k - 1][i]
@@ -1880,13 +1883,13 @@ export function SUMPRODUCT() {
           return _i
         }
 
-        product = Decimal.mul(product, _i)
+        product = product.times(_i)
       }
 
-      result = Decimal.add(result, product)
+      result = result.plus(product)
     } else {
       for (let j = 0; j < arguments[0][i].length; j++) {
-        product = new Decimal(1)
+        product = new Big(1)
 
         for (k = 1; k < arrays; k++) {
           const _ij_arg = arguments[k - 1][i][j]
@@ -1901,10 +1904,10 @@ export function SUMPRODUCT() {
             return _ij
           }
 
-          product = Decimal.mul(product, _ij)
+          product = product.times(_ij)
         }
 
-        result = Decimal.add(result, product)
+        result = result.plus(product)
       }
     }
   }

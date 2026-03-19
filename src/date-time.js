@@ -1,7 +1,7 @@
 import * as error from './utils/error.js'
 import * as utils from './utils/common.js'
 import { dateToSerial, returnSerial } from './utils/date.js'
-import Decimal from 'decimal.js'
+import Big from 'big.js'
 
 const WEEK_STARTS = [
   undefined,
@@ -110,10 +110,10 @@ export function DATE(year, month, day) {
     }
 
     if (year >= 0 && year <= 1899) {
-      year = new Decimal(year).add(1900).toNumber()
+      year = new Big(year).add(1900).toNumber()
     }
 
-    result = new Date(year, new Decimal(month).sub(1).toNumber(), day)
+    result = new Date(year, new Big(month).minus(1).toNumber(), day)
 
     if (result.getFullYear() < 0) {
       result = error.num

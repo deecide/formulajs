@@ -1,7 +1,7 @@
 import * as error from './error.js'
 import * as evalExpression from './criteria-eval.js'
 import { serialToDate } from './date.js'
-import Decimal from 'decimal.js'
+import Big from 'big.js'
 
 class BlankValue {
   constructor() {
@@ -370,7 +370,7 @@ export function parseDecimal(string) {
   }
 
   if (string === undefined || string === null || string instanceof BlankValue) {
-    return new Decimal(0)
+    return new Big(0)
   }
 
   if (typeof string === 'boolean') {
@@ -378,7 +378,7 @@ export function parseDecimal(string) {
   }
 
   if (!isNaN(string) && string !== '') {
-    return new Decimal(string)
+    return new Big(string)
   }
 
   return error.value
@@ -547,7 +547,11 @@ export function isDefined(arg) {
 }
 
 export function isDecimal(value) {
-  return value instanceof Decimal
+  return value instanceof Big
+}
+
+export function isZero(arg) {
+  return arg.eq(Big(0))
 }
 
 export function isBlankValue(value) {

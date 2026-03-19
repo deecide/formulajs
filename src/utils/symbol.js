@@ -2,7 +2,6 @@ import * as error from './error.js'
 import * as utils from './common.js'
 
 import { POWER } from './../math-trig.js'
-import Decimal from 'decimal.js'
 
 /**
  * Following functions are part of Formula.js only and not found in Excel.
@@ -29,7 +28,7 @@ export function ADD(num1, num2) {
     return anyError
   }
 
-  return Decimal.add(num1, num2).toNumber()
+  return num1.plus(num2).toNumber()
 }
 
 /**
@@ -52,11 +51,11 @@ export function DIVIDE(dividend, divisor) {
     return anyError
   }
 
-  if (divisor.isZero()) {
+  if (utils.isZero(divisor)) {
     return error.div0
   }
 
-  return Decimal.div(dividend, divisor).toNumber()
+  return dividend.div(divisor).toNumber()
 }
 
 /**
@@ -297,7 +296,7 @@ export function MINUS(num1, num2) {
     return anyError
   }
 
-  return Decimal.sub(num1, num2).toNumber()
+  return num1.minus(num2).toNumber()
 }
 
 /**
@@ -320,7 +319,7 @@ export function MULTIPLY(factor1, factor2) {
     return anyError
   }
 
-  return Decimal.mul(factor1, factor2).toNumber()
+  return factor1.times(factor2).toNumber()
 }
 
 /**
